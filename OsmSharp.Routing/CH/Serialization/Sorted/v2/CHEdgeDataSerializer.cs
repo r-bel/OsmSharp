@@ -183,37 +183,67 @@ namespace OsmSharp.Routing.CH.Serialization.Sorted.v2
             while (vertexId < sortedGraph.VertexCount)
             {
                 uint blockId = vertexId;
-                List<CHArc> blockArcs = new List<CHArc>();
+
                 List<CHVertex> blockVertices = new List<CHVertex>();
+                List<ushort> vertexArcIndexes = new List<ushort>();
+                List<ushort> vertexArcCounts = new List<ushort>();
+                List<float> vertexLatitudes = new List<float>();
+                List<float> vertexLongitudes = new List<float>();
+
+                List<uint> arcTargetIds = new List<uint>();
+                List<float> arcWeights = new List<float>();
+                List<uint> arcShortcutIds = new List<uint>();
+                List<byte> arcDirections = new List<byte>();
+                List<uint> arcTagsIds = new List<uint>();
+
                 while (vertexId < blockId + _blockVertexSize &&
                     vertexId < sortedGraph.VertexCount + 1)
                 { // create this block.
-                    CHVertex chVertex = new CHVertex();
+                    //CHVertex chVertex = new CHVertex();
                     float latitude, longitude;
                     sortedGraph.GetVertex(vertexId, out latitude, out longitude);
-                    chVertex.Latitude = latitude;
-                    chVertex.Longitude = longitude;
-                    chVertex.ArcIndex = (ushort)(blockArcs.Count);
+                    //chVertex.Latitude = latitude;
+                    vertexLatitudes.Add(latitude);
+                    //chVertex.Longitude = longitude;
+                    vertexLongitudes.Add(longitude);
+                    //chVertex.ArcIndex = (ushort)(blockArcs.Count);
+                    ushort beforeCount = (ushort)(arcTargetIds.Count);
+                    vertexArcIndexes.Add(beforeCount);
                     foreach (KeyValuePair<uint, CHEdgeData> sortedArc in sortedGraph.GetArcs(vertexId))
                     {
-                        CHArc chArc = new CHArc();
-                        chArc.TargetId = sortedArc.Key;
-                        chArc.ShortcutId = sortedArc.Value.ContractedVertexId;
-                        chArc.Weight = sortedArc.Value.Weight;
-                        chArc.Direction = sortedArc.Value.Direction;
-                        chArc.TagsId = sortedArc.Value.Tags;
-                        blockArcs.Add(chArc);
+                        //CHArc chArc = new CHArc();
+                        //chArc.TargetId = sortedArc.Key;
+                        arcTargetIds.Add(sortedArc.Key);
+                        //chArc.ShortcutId = sortedArc.Value.ContractedVertexId;
+                        arcShortcutIds.Add(sortedArc.Value.ContractedVertexId);
+                        //chArc.Weight = sortedArc.Value.Weight;
+                        arcWeights.Add(sortedArc.Value.Weight);
+                        //chArc.Direction = sortedArc.Value.Direction;
+                        arcDirections.Add(sortedArc.Value.Direction);
+                        //chArc.TagsId = sortedArc.Value.Tags;
+                        arcTagsIds.Add(sortedArc.Value.Tags);
+                        //blockArcs.Add(chArc);
                     }
-                    chVertex.ArcCount = (ushort)(blockArcs.Count - chVertex.ArcIndex);
-                    blockVertices.Add(chVertex);
+                    //chVertex.ArcCount = (ushort)(blockArcs.Count - chVertex.ArcIndex);
+                    vertexArcCounts.Add((ushort)(arcTargetIds.Count - beforeCount));
+                    //blockVertices.Add(chVertex);
 
                     vertexId++; // move to the next vertex.
                 }
 
                 // create block.
                 CHBlock block = new CHBlock();
-                block.Arcs = blockArcs.ToArray();
-                block.Vertices = blockVertices.ToArray(); // TODO: get rid of the list and create an array to begin with.
+                //block.Arcs = blockArcs.ToArray();
+                block.ArcDirection = arcDirections.ToArray();
+                block.ArcShortcutId = arcShortcutIds.ToArray();
+                block.ArcTagsId = arcTagsIds.ToArray();
+                block.ArcTargetId = arcTargetIds.ToArray();
+                block.ArcWeight = arcWeights.ToArray();
+                //block.Vertices = blockVertices.ToArray(); // TODO: get rid of the list and create an array to begin with.
+                block.VertexArcCount = vertexArcCounts.ToArray();
+                block.VertexArcIndex = vertexArcIndexes.ToArray();
+                block.VertexLatitude = vertexLatitudes.ToArray();
+                block.VertexLongitude = vertexLongitudes.ToArray();
 
                 // write blocks.
                 MemoryStream blockStream = new MemoryStream();

@@ -341,11 +341,11 @@ namespace OsmSharp.Routing.CH.Serialization.Sorted.v2
                 _blocks.Add(blockId, block);
             }
             uint blockIdx = vertexId - blockId;
-            if (block.Vertices != null &&
-                blockIdx < block.Vertices.Length)
+            if (block.VertexLatitude != null &&
+                blockIdx < block.VertexLatitude.Length)
             { // block is found and the vertex is there!
-                latitude = block.Vertices[blockIdx].Latitude;
-                longitude = block.Vertices[blockIdx].Longitude;
+                latitude = block.VertexLatitude[blockIdx];
+                longitude = block.VertexLongitude[blockIdx];
                 return true;
             }
             // oops even now the block is not found!
@@ -373,22 +373,22 @@ namespace OsmSharp.Routing.CH.Serialization.Sorted.v2
                 _blocks.Add(blockId, block);
             }
             uint blockIdx = vertexId - blockId;
-            if (block.Vertices != null &&
-                blockIdx < block.Vertices.Length)
+            if (block.VertexLatitude != null &&
+                blockIdx < block.VertexLatitude.Length)
             { // block is found and the vertex is there!
                 KeyValuePair<uint, CHEdgeData>[] arcs = new KeyValuePair<uint, CHEdgeData>[
-                    block.Vertices[blockIdx].ArcCount];
-                for (int arcIdx = block.Vertices[blockIdx].ArcIndex;
-                    arcIdx < block.Vertices[blockIdx].ArcIndex + block.Vertices[blockIdx].ArcCount; arcIdx++)
+                    block.VertexArcCount[blockIdx]];
+                for (int arcIdx = block.VertexArcIndex[blockIdx];
+                    arcIdx < block.VertexArcIndex[blockIdx] + block.VertexArcCount[blockIdx]; arcIdx++)
                 { // loop over all arcs.
-                    CHArc chArc = block.Arcs[arcIdx];
+                    //CHArc chArc = block.Arcs[arcIdx];
                     CHEdgeData edgeData = new CHEdgeData();
-                    edgeData.Direction = chArc.Direction;
-                    edgeData.ContractedVertexId = chArc.ShortcutId;
-                    edgeData.Weight = chArc.Weight;
-                    edgeData.Tags = chArc.TagsId;
-                    arcs[arcIdx - block.Vertices[blockIdx].ArcIndex] = new KeyValuePair<uint, CHEdgeData>(
-                        chArc.TargetId, edgeData);
+                    edgeData.Direction = block.ArcDirection[arcIdx];
+                    edgeData.ContractedVertexId = block.ArcShortcutId[arcIdx];
+                    edgeData.Weight = block.ArcWeight[arcIdx];
+                    edgeData.Tags = block.ArcTagsId[arcIdx];
+                    arcs[arcIdx - block.VertexArcIndex[blockIdx]] = new KeyValuePair<uint, CHEdgeData>(
+                        block.ArcTargetId[arcIdx], edgeData);
                 }
                 return arcs;
             }

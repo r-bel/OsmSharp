@@ -44,16 +44,58 @@ namespace OsmSharp.Routing.CH.Serialization.Sorted.v2
     public class CHBlock
     {
         /// <summary>
-        /// Holds lower/higher index of arcs.
+        /// The lower index of the arcs associated with this vertex.
         /// </summary>
-        [ProtoMember(1)]
-        public CHVertex[] Vertices { get; set; }
+        [ProtoMember(1, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+        public ushort[] VertexArcIndex { get; set; }
 
         /// <summary>
-        /// Holds the array of arcs for all nodes in this block.
+        /// The number of arcs associated with this vertex.
         /// </summary>
-        [ProtoMember(2)]
-        public CHArc[] Arcs { get; set; }
+        [ProtoMember(2, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+        public ushort[] VertexArcCount { get; set; }
+
+        /// <summary>
+        /// Holds the vertex latitude.
+        /// </summary>
+        [ProtoMember(3, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+        public float[] VertexLatitude { get; set; }
+
+        /// <summary>
+        /// Holds the vertex longitude.
+        /// </summary>
+        [ProtoMember(4, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+        public float[] VertexLongitude { get; set; }
+        
+        /// <summary>
+        /// The id of the target-vertex when not in this block.
+        /// </summary>
+        [ProtoMember(5, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+        public uint[] ArcTargetId { get; set; }
+
+        /// <summary>
+        /// The weight of this arc.
+        /// </summary>
+        [ProtoMember(6, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+        public float[] ArcWeight { get; set; }
+
+        /// <summary>
+        /// Holds the id of the external shortcut vertex.
+        /// </summary>
+        [ProtoMember(7, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+        public uint[] ArcShortcutId { get; set; }
+
+        /// <summary>
+        /// Holds the direction(s) of this arc (0=bidirectional, 1=forward, 2=backward)
+        /// </summary>
+        [ProtoMember(8, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+        public byte[] ArcDirection { get; set; }
+
+        /// <summary>
+        /// Holds the tags id associated with this arc.
+        /// </summary>
+        [ProtoMember(9, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+        public uint[] ArcTagsId { get; set; }
 
         /// <summary>
         /// Calculates the block id for the given vertex id using the block size.
@@ -68,74 +110,6 @@ namespace OsmSharp.Routing.CH.Serialization.Sorted.v2
     }
 
     /// <summary>
-    /// Represents a CH vertex.
-    /// </summary>
-    [ProtoContract]
-    public struct CHVertex
-    {
-        /// <summary>
-        /// The lower index of the arcs associated with this vertex.
-        /// </summary>
-        [ProtoMember(1)]
-        public ushort ArcIndex { get; set; }
-
-        /// <summary>
-        /// The number of arcs associated with this vertex.
-        /// </summary>
-        [ProtoMember(2)]
-        public ushort ArcCount { get; set; }
-
-        /// <summary>
-        /// Holds the vertex latitude.
-        /// </summary>
-        [ProtoMember(3)]
-        public float Latitude { get; set; }
-
-        /// <summary>
-        /// Holds the vertex longitude.
-        /// </summary>
-        [ProtoMember(4)]
-        public float Longitude { get; set; }
-    }
-
-    /// <summary>
-    /// Represents CH arc.
-    /// </summary>
-    [ProtoContract]
-    public struct CHArc
-    {
-        /// <summary>
-        /// The id of the target-vertex when not in this block.
-        /// </summary>
-        [ProtoMember(1)]
-        public uint TargetId { get; set; }
-
-        /// <summary>
-        /// The weight of this arc.
-        /// </summary>
-        [ProtoMember(2)]
-        public float Weight { get; set; }
-
-        /// <summary>
-        /// Holds the id of the external shortcut vertex.
-        /// </summary>
-        [ProtoMember(3)]
-        public uint ShortcutId { get; set; }
-
-        /// <summary>
-        /// Holds the direction(s) of this arc (0=bidirectional, 1=forward, 2=backward)
-        /// </summary>
-        [ProtoMember(4)]
-        public byte Direction { get; set; }
-
-        /// <summary>
-        /// Holds the tags id associated with this arc.
-        /// </summary>
-        [ProtoMember(5)]
-        public uint TagsId { get; set; }
-    }
-
-    /// <summary>
     /// Represents an index of all CH regions.
     /// </summary>
     [ProtoContract]
@@ -144,13 +118,13 @@ namespace OsmSharp.Routing.CH.Serialization.Sorted.v2
         /// <summary>
         /// Holds all region ids.
         /// </summary>
-        [ProtoMember(1)]
+        [ProtoMember(1, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
         public ulong[] RegionIds { get; set; }
 
         /// <summary>
         /// Holds all relative region locations in the file.
         /// </summary>
-        [ProtoMember(2)]
+        [ProtoMember(2, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
         public int[] LocationIndex { get; set; }
     }
 
@@ -163,7 +137,7 @@ namespace OsmSharp.Routing.CH.Serialization.Sorted.v2
         /// <summary>
         /// The list of vertices in this region.
         /// </summary>
-        [ProtoMember(1)]
+        [ProtoMember(1, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
         public uint[] Vertices { get; set; }
     }
 }

@@ -22,7 +22,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using OsmSharp.IO;
-using OsmSharp.UI.Renderer.Scene.Storage.RTree;
 
 namespace OsmSharp.UI.Renderer.Scene.Storage.Layered
 {
@@ -96,7 +95,7 @@ namespace OsmSharp.UI.Renderer.Scene.Storage.Layered
                 //Scene2DRTreeSerializer serializer = new Scene2DRTreeSerializer(true);
                 //_nonSimplifiedScene = new Scene2DPrimitivesSource(serializer.Deserialize(stream));
                 OsmSharp.UI.Renderer.Scene.Storage.Styled.Scene2DStyledSerializer serializer =
-                    new Styled.Scene2DStyledSerializer();
+                    new Styled.Scene2DStyledSerializer(true);
                 _nonSimplifiedScene = serializer.Deserialize(stream, true);
             }
             return _nonSimplifiedScene;
@@ -125,7 +124,7 @@ namespace OsmSharp.UI.Renderer.Scene.Storage.Layered
 						//Scene2DRTreeSerializer serializer = new Scene2DRTreeSerializer(true);
 						//simpleSource = new Scene2DPrimitivesSource(serializer.Deserialize(stream));
 						OsmSharp.UI.Renderer.Scene.Storage.Styled.Scene2DStyledSerializer serializer =
-							new Styled.Scene2DStyledSerializer ();
+							new Styled.Scene2DStyledSerializer (true);
 						simpleSource = serializer.Deserialize (stream, true);
 						_loadedScenes.Add (idx, simpleSource);
 					}

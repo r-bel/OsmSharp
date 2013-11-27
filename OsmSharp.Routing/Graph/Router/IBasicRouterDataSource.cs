@@ -52,7 +52,6 @@ namespace OsmSharp.Routing.Graph.Router
             get;
         }
 
-
         /// <summary>
         /// Adds a restriction to this graph by prohibiting the given route.
         /// </summary>

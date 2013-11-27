@@ -39,26 +39,16 @@ namespace OsmSharp.Routing.CH.PreProcessing
         private CHEdgeDataComparer _comparer;
 
         /// <summary>
-        /// Holds the keep direct neighbours flag.
-        /// </summary>
-        private bool _keepDirectNeighbours = true;
-
-
-        /// <summary>
         /// Creates a new pre-processor.
         /// </summary>
         /// <param name="target"></param>
         /// <param name="calculator"></param>
         /// <param name="witnessCalculator"></param>
-        /// <param name="keepDirectNeighbours"></param>
         public CHPreProcessor(IDynamicGraphRouterDataSource<CHEdgeData> target,
                 INodeWeightCalculator calculator,
-                INodeWitnessCalculator witnessCalculator, 
-                bool keepDirectNeighbours)
+                INodeWitnessCalculator witnessCalculator)
         {
             _comparer = new CHEdgeDataComparer();
-
-            _keepDirectNeighbours = keepDirectNeighbours;
 
             _target = target;
 
@@ -68,17 +58,6 @@ namespace OsmSharp.Routing.CH.PreProcessing
             _queue = new CHPriorityQueue();
             _contracted = new bool[1000];
         }
-
-        /// <summary>
-        /// Creates a new pre-processor.
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="calculator"></param>
-        /// <param name="witnessCalculator"></param>
-        public CHPreProcessor(IDynamicGraphRouterDataSource<CHEdgeData> target,
-                INodeWeightCalculator calculator,
-                INodeWitnessCalculator witnessCalculator)
-            : this(target, calculator, witnessCalculator, true) { }
 
         #region Contraction
 
@@ -164,9 +143,6 @@ namespace OsmSharp.Routing.CH.PreProcessing
             // get all information from the source.
             KeyValuePair<uint, CHEdgeData>[] edges = _target.GetArcs(vertex);
 
-            // remove all informative edges.
-            edges = edges.RemoveInformativeEdges();
-
             // report the before contraction event.
             this.OnBeforeContraction(vertex, edges);
 
@@ -174,25 +150,16 @@ namespace OsmSharp.Routing.CH.PreProcessing
             foreach (KeyValuePair<uint, CHEdgeData> edge in edges)
             { // remove the edge.
                 _target.DeleteArc(edge.Key, vertex);
-
-                // keep the neighbour.
-                if (_keepDirectNeighbours && !edge.Value.HasContractedVertex)
-                { // edge does represent a neighbour relation.
-                    neighbours.Add(
-                        new KeyValuePair<uint, CHEdgeData>(edge.Key, edge.Value.ConvertToInformative()));
-                }
             }
 
             // loop over each combination of edges just once.
             for (int x = 1; x < edges.Length; x++)
             { // loop over all elements first.
                 KeyValuePair<uint, CHEdgeData> xEdge = edges[x];
-                if (xEdge.Value.IsInformative) { continue; }
 
                 for (int y = 0; y < x; y++)
                 { // loop over all elements.
                     KeyValuePair<uint, CHEdgeData> yEdge = edges[y];
-                    if (yEdge.Value.IsInformative) { continue; }
 
                     // calculate the total weight.
                     float weight = xEdge.Value.Weight + yEdge.Value.Weight;
@@ -245,15 +212,6 @@ namespace OsmSharp.Routing.CH.PreProcessing
 
             // notify a contracted neighbour.
             _calculator.NotifyContracted(vertex);
-
-            // add contracted neighbour edges again.
-            if (_keepDirectNeighbours)
-            {
-                foreach (KeyValuePair<uint, CHEdgeData> neighbour in neighbours)
-                {
-                    _target.AddArc(neighbour.Key, vertex, neighbour.Value, null);
-                }
-            }
 
             // report the after contraction event.
             this.OnAfterContraction(vertex, edges);

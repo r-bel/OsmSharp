@@ -346,7 +346,7 @@ namespace OsmSharp.Routing.CH.Serialization.Sorted.v2
                         KeyValuePair<uint, CHEdgeData>[] arcs = graph.GetArcs(binVertexId);
                         foreach (KeyValuePair<uint, CHEdgeData> arc in arcs)
                         {
-                            if (arc.Value.IsInformative || arc.Value.ToHigher)
+                            if (arc.Value.ToHigher)
                             {
                                 // get target vertex.
                                 uint nextVertexArcId = CHEdgeDataDataSourceSerializer.SearchVertex(arc.Key, currentBinIds, heightBins);

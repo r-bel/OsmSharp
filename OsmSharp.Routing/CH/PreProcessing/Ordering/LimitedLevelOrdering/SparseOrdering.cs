@@ -53,9 +53,6 @@ namespace OsmSharp.Routing.CH.PreProcessing.Ordering.LimitedLevelOrdering
         {
             KeyValuePair<uint, CHEdgeData>[] neighbours = _data.GetArcs(vertex);
 
-            // remove all informative edges.
-            neighbours = neighbours.RemoveInformativeEdges();
-
             // check the proper conditions.
             if (neighbours.Length == 2)
             {

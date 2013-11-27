@@ -199,7 +199,7 @@
     <Compile Include="Osm\Router.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Graph\Router\IBasicRouterDataSource.cs" />
-    <Compile Include="Graph\DynamicGraphRouterDataSource.cs" />
+    <Compile Include="Graph\Router\DynamicGraphRouterDataSource.cs" />
     <Compile Include="IEdgeMatcher.cs" />
     <Compile Include="RouterPoint.cs" />
     <Compile Include="Routers\ITypedRouter.cs" />

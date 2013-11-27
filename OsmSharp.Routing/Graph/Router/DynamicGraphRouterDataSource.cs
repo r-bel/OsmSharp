@@ -22,9 +22,8 @@ using OsmSharp.Collections.Tags;
 using OsmSharp.Math.Geo;
 using OsmSharp.Math.Structures;
 using OsmSharp.Math.Structures.QTree;
-using OsmSharp.Routing.Graph.Router;
 
-namespace OsmSharp.Routing.Graph
+namespace OsmSharp.Routing.Graph.Router
 {
     /// <summary>
     /// A router data source that uses a IDynamicGraph as it's main datasource.

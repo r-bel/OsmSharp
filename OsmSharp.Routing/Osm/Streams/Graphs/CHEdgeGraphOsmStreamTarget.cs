@@ -117,10 +117,9 @@ namespace OsmSharp.Routing.Osm.Streams.Graphs
         /// <param name="tagsIndex"></param>
         /// <param name="interpreter"></param>
         /// <param name="vehicle"></param>
-        /// <param name="keepDirectNeighbours"></param>
         /// <returns></returns>
         public static DynamicGraphRouterDataSource<CHEdgeData> Preprocess(OsmStreamSource reader,
-            ITagsCollectionIndex tagsIndex, IOsmRoutingInterpreter interpreter, Vehicle vehicle, bool keepDirectNeighbours)
+            ITagsCollectionIndex tagsIndex, IOsmRoutingInterpreter interpreter, Vehicle vehicle)
         {
             // pull in the data.
             var dynamicGraphRouterDataSource =
@@ -135,27 +134,10 @@ namespace OsmSharp.Routing.Osm.Streams.Graphs
             var edgeDifference = new EdgeDifference(
                     dynamicGraphRouterDataSource, witnessCalculator);
             var preProcessor = new CHPreProcessor(
-                dynamicGraphRouterDataSource, edgeDifference, witnessCalculator, keepDirectNeighbours);
+                dynamicGraphRouterDataSource, edgeDifference, witnessCalculator);
             preProcessor.Start();
 
             return dynamicGraphRouterDataSource;
-        }
-
-        
-        /// <summary>
-        /// Preprocesses the data from the given OsmStreamReader and converts it directly to a routable data source.
-        /// </summary>
-        /// <param name="reader"></param>
-        /// <param name="tagsIndex"></param>
-        /// <param name="interpreter"></param>
-        /// <param name="vehicle"></param>
-        /// <returns></returns>
-        public static DynamicGraphRouterDataSource<CHEdgeData> Preprocess(OsmStreamSource reader,
-                                                                        ITagsCollectionIndex tagsIndex,
-                                                                        IOsmRoutingInterpreter interpreter,
-                                                                        Vehicle vehicle)
-        {
-            return CHEdgeGraphOsmStreamTarget.Preprocess(reader, tagsIndex, interpreter, vehicle, true);
         }
 
         /// <summary>

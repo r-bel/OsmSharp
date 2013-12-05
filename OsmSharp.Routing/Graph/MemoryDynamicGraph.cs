@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections.Generic;
-using OsmSharp.Math.Geo.Simple;
 
 namespace OsmSharp.Routing.Graph
 {
@@ -37,11 +36,6 @@ namespace OsmSharp.Routing.Graph
         /// Holds all graph data.
         /// </summary>
         private KeyValuePair<uint, TEdgeData>[][] _vertices;
-
-        /// <summary>
-        /// Holds the coordinates of the vertices.
-        /// </summary>
-        private GeoCoordinateSimple[] _coordinates;
         
         /// <summary>
         /// Creates a new in-memory graph.
@@ -50,7 +44,6 @@ namespace OsmSharp.Routing.Graph
         {
             _nextId = 1;
             _vertices = new KeyValuePair<uint, TEdgeData>[1000][];
-            _coordinates = new GeoCoordinateSimple[1000];
         }
 
         /// <summary>
@@ -58,66 +51,7 @@ namespace OsmSharp.Routing.Graph
         /// </summary>
         private void IncreaseSize()
         {
-            Array.Resize<GeoCoordinateSimple>(ref _coordinates, _coordinates.Length + 1000);
             Array.Resize<KeyValuePair<uint, TEdgeData>[]>(ref _vertices, _vertices.Length + 1000);
-        }
-
-        /// <summary>
-        /// Adds a new vertex to this graph.
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <param name="neighboursEstimate"></param>
-        /// <returns></returns>
-        public uint AddVertex(float latitude, float longitude, byte neighboursEstimate)
-        {
-            return this.AddVertex(latitude, longitude);
-        }
-
-        /// <summary>
-        /// Adds a new vertex.
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <returns></returns>
-        public uint AddVertex(float latitude, float longitude)
-        {
-            // make sure vertices array is large enough.
-            if (_nextId >= _vertices.Length)
-            {
-                this.IncreaseSize();
-            }
-
-            // create vertex.
-            uint newId = _nextId;
-            _vertices[newId] = null;
-            _coordinates[newId] = new GeoCoordinateSimple()
-            {
-                Latitude = latitude,
-                Longitude = longitude
-            };
-            _nextId++; // increase for next vertex.
-            return newId; 
-        }
-
-        /// <summary>
-        /// Returns the information in the current vertex.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <returns></returns>
-        public bool GetVertex(uint id, out float latitude, out float longitude)
-        {
-            if (_vertices.Length > id)
-            {
-                latitude = _coordinates[id].Latitude;
-                longitude = _coordinates[id].Longitude;
-                return true;
-            }
-            latitude = float.MaxValue;
-            longitude = float.MaxValue;
-            return false;
         }
 
         /// <summary>

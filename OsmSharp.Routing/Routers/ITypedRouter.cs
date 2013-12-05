@@ -5,7 +5,7 @@ using System.Text;
 using OsmSharp.Collections.Tags;
 using OsmSharp.Math.Geo;
 
-namespace OsmSharp.Routing.Routers
+namespace OsmSharp.Routing.BasicRouters
 {
     /// <summary>
     /// Abstracts the functionality of implemented by any TypeRouter class.

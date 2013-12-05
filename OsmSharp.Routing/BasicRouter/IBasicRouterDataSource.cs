@@ -16,37 +16,28 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using System.Collections.Generic;
-
-namespace OsmSharp.Routing.Graph
+using OsmSharp.Routing.Graph;
+namespace OsmSharp.Routing.BasicRouter
 {
     /// <summary>
-    /// Abstracts an graph implementation. 
+    /// Abstracts a writable data source for a basic router.
     /// </summary>
-    public interface IDynamicGraphReadOnly<TEdgeData>
+    /// <typeparam name="TEdgeData"></typeparam>
+    public interface IBasicRouterDataSource<TEdgeData> : IDynamicGraph<TEdgeData>, IBasicRouterDataSourceReadOnly<TEdgeData>
         where TEdgeData : IDynamicGraphEdgeData
     {
         /// <summary>
-        /// Returns all arcs for the given vertex.
+        /// Adds the given vehicle as a supported vehicle profile.
         /// </summary>
-        /// <param name="vertexId"></param>
-        /// <returns></returns>
-        KeyValuePair<uint, TEdgeData>[] GetArcs(uint vertexId);
+        /// <param name="vehicle"></param>
+        void AddSupportedVehicle(Vehicle vehicle);
 
         /// <summary>
-        /// Returns true if the given vertex has the neighbour as a neighbour.
+        /// Adds a vertex.
         /// </summary>
-        /// <param name="vertexId"></param>
-        /// <param name="neighbour"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
         /// <returns></returns>
-        bool HasArc(uint vertexId, uint neighbour);
-
-        /// <summary>
-        /// Returns the total number of vertices.
-        /// </summary>
-        uint VertexCount
-        {
-            get;
-        }
+        uint AddVertexLocation(float latitude, float longitude);
     }
 }

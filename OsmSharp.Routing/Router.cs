@@ -23,13 +23,13 @@ using OsmSharp.Osm.Streams;
 using OsmSharp.Osm.Streams.Filters;
 using OsmSharp.Routing.CH.PreProcessing;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Router;
-using OsmSharp.Routing.Graph.Router.Dykstra;
+using OsmSharp.Routing.BasicRouter;
+using OsmSharp.Routing.BasicRouter.Dykstra;
 using OsmSharp.Routing.Interpreter;
 using OsmSharp.Routing.Osm.Graphs;
 using OsmSharp.Routing.Osm.Interpreter;
 using OsmSharp.Routing.Osm.Streams.Graphs;
-using OsmSharp.Routing.Routers;
+using OsmSharp.Routing.BasicRouters;
 using OsmSharp.Routing.CH;
 
 namespace OsmSharp.Routing

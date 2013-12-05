@@ -32,14 +32,6 @@ namespace OsmSharp.Routing.Graph
         /// Returns true if this edge represents a neighbour relation.
         /// </summary>
         bool RepresentsNeighbourRelations { get; }
-
-        /// <summary>
-        /// Returns the tags identifier.
-        /// </summary>
-        uint Tags
-        {
-            get;
-        }
     }
 
     /// <summary>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OsmSharp.Routing.Routers;
+using OsmSharp.Routing.BasicRouters;
 using OsmSharp.Math.Geo;
 
 namespace OsmSharp.Routing.VRP.WithDepot.MaxTime

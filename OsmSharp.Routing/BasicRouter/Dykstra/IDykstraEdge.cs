@@ -16,15 +16,18 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-namespace OsmSharp.Routing.Graph.Router
+using OsmSharp.Routing.Graph;
+
+namespace OsmSharp.Routing.BasicRouter.Dykstra
 {
     /// <summary>
-    /// Interface representing objects that are both and IBasicRouterDataSource and a IDynamicGraph.
+    /// Abstracts edge information.
     /// </summary>
-    /// <typeparam name="TEdgeData"></typeparam>
-    public interface IDynamicGraphRouterDataSource<TEdgeData> : IDynamicGraph<TEdgeData>, IBasicRouterDataSource<TEdgeData>
-        where TEdgeData : IDynamicGraphEdgeData
+    public interface IDykstraEdge : IDynamicGraphEdgeData
     {
-
+        /// <summary>
+        /// Returns the meta-data id for this edge.
+        /// </summary>
+        uint Tags { get; }
     }
 }

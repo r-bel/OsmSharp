@@ -7,7 +7,7 @@
 //using OsmSharp.Osm.Streams.Filters;
 //using OsmSharp.Osm.Tiles;
 //using OsmSharp.Routing.Graph;
-//using OsmSharp.Routing.Graph.Router;
+//using OsmSharp.Routing.BasicRouter;
 //using OsmSharp.Collections.Tags;
 //using OsmSharp.Math.Geo;
 //using OsmSharp.Osm;

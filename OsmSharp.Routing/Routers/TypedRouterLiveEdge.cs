@@ -16,11 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.Interpreter;
 using OsmSharp.Routing.Osm.Graphs;
 
-namespace OsmSharp.Routing.Routers
+namespace OsmSharp.Routing.BasicRouters
 {
     /// <summary>
     /// A version of the typedrouter using edges of type LiveEdge.

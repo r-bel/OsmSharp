@@ -20,13 +20,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.Interpreter;
 using OsmSharp.Routing.Metrics.Time;
 using OsmSharp.Collections.Tags;
 using OsmSharp.Math.Geo;
 
-namespace OsmSharp.Routing.Routers
+namespace OsmSharp.Routing.BasicRouters
 {
     /// <summary>
     /// A class that implements common functionality for any routing algorithm.
@@ -1399,13 +1399,13 @@ namespace OsmSharp.Routing.Routers
                 settled.Add(current.VertexId);
 
                 // get the neighbours.
-                KeyValuePair<long, OsmSharp.Routing.Routers.TypedRouterResolvedGraph.RouterResolvedGraphEdge>[] arcs = 
+                KeyValuePair<long, OsmSharp.Routing.BasicRouters.TypedRouterResolvedGraph.RouterResolvedGraphEdge>[] arcs = 
                     graph.GetArcs(current.VertexId);
                 float latitudeCurrent, longitudeCurrent;
                 graph.GetVertex(current.VertexId, out latitudeCurrent, out longitudeCurrent);
                 for (int idx = 0; idx < arcs.Length; idx++)
                 {
-                    KeyValuePair<long, OsmSharp.Routing.Routers.TypedRouterResolvedGraph.RouterResolvedGraphEdge> arc = arcs[idx];
+                    KeyValuePair<long, OsmSharp.Routing.BasicRouters.TypedRouterResolvedGraph.RouterResolvedGraphEdge> arc = arcs[idx];
                     if (!settled.Contains(arc.Key) && (arc.Key < 0 || arc.Key == vertex2))
                     {
                         float latitudeNeighbour, longitudeNeighbour;

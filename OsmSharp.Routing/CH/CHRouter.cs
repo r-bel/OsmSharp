@@ -26,7 +26,7 @@ using OsmSharp.Math.Primitives;
 using OsmSharp.Routing.CH.PreProcessing;
 using OsmSharp.Routing.CH.Routing;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.Interpreter;
 
 namespace OsmSharp.Routing.CH

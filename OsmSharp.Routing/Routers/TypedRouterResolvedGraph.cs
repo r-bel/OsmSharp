@@ -22,7 +22,7 @@ using System.Text;
 using OsmSharp.Routing;
 using OsmSharp.Routing.Graph;
 
-namespace OsmSharp.Routing.Routers
+namespace OsmSharp.Routing.BasicRouters
 {
     /// <summary>
     /// An implementation of an in-memory dynamic graph.

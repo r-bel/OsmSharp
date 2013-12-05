@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OsmSharp.Routing.Graph.Router
+namespace OsmSharp.Routing.BasicRouter
 {
     /// <summary>
     /// Internal data structure reprenting a visit list,
@@ -30,7 +30,7 @@ namespace OsmSharp.Routing.Graph.Router
         /// <summary>
         /// Holds all visited nodes sorted by weight.
         /// </summary>
-        private SortedList<double, Dictionary<long, PathSegment<long>>> _visit_list;
+        private SortedList<double, Dictionary<long, PathSegment<long>>> _visitList;
 
         /// <summary>
         /// Holds all visited vertices.
@@ -42,7 +42,7 @@ namespace OsmSharp.Routing.Graph.Router
         /// </summary>
         public PathSegmentVisitList()
         {
-            _visit_list = new SortedList<double, Dictionary<long, PathSegment<long>>>();
+            _visitList = new SortedList<double, Dictionary<long, PathSegment<long>>>();
             _visited = new Dictionary<long, double>();
 
             this.Neighbour1 = -1;
@@ -56,7 +56,7 @@ namespace OsmSharp.Routing.Graph.Router
         /// <param name="neighbour2"></param>
         public PathSegmentVisitList(long neighbour1, long neighbour2)
         {
-            _visit_list = new SortedList<double, Dictionary<long, PathSegment<long>>>();
+            _visitList = new SortedList<double, Dictionary<long, PathSegment<long>>>();
             _visited = new Dictionary<long, double>();
 
             this.Neighbour1 = neighbour1;
@@ -69,17 +69,17 @@ namespace OsmSharp.Routing.Graph.Router
         /// <param name="source"></param>
         public PathSegmentVisitList(PathSegmentVisitList source)
         {
-            _visit_list = new SortedList<double, Dictionary<long, PathSegment<long>>>();
+            _visitList = new SortedList<double, Dictionary<long, PathSegment<long>>>();
             _visited = new Dictionary<long, double>();
 
-            foreach (KeyValuePair<double, Dictionary<long, PathSegment<long>>> pair in source._visit_list)
+            foreach (KeyValuePair<double, Dictionary<long, PathSegment<long>>> pair in source._visitList)
             {
                 Dictionary<long, PathSegment<long>> dic = new Dictionary<long, PathSegment<long>>();
                 foreach (KeyValuePair<long, PathSegment<long>> path_pair in pair.Value)
                 {
                     dic.Add(path_pair.Key, path_pair.Value);
                 }
-                _visit_list.Add(pair.Key, dic);
+                _visitList.Add(pair.Key, dic);
             }
 
             foreach (KeyValuePair<long, double> pair in source._visited)
@@ -102,11 +102,11 @@ namespace OsmSharp.Routing.Graph.Router
             { // the vertex was already in this list.
                 if (current_weight > route.Weight)
                 { // replace the existing.
-                    Dictionary<long, PathSegment<long>> current_weight_vertices = _visit_list[current_weight];
+                    Dictionary<long, PathSegment<long>> current_weight_vertices = _visitList[current_weight];
                     current_weight_vertices.Remove(route.VertexId);
                     if (current_weight_vertices.Count == 0)
                     {
-                        _visit_list.Remove(current_weight);
+                        _visitList.Remove(current_weight);
                     }
                 }
                 else
@@ -117,10 +117,10 @@ namespace OsmSharp.Routing.Graph.Router
 
             // add/update everthing.
             Dictionary<long, PathSegment<long>> vertices_at_weight;
-            if (!_visit_list.TryGetValue(route.Weight, out vertices_at_weight))
+            if (!_visitList.TryGetValue(route.Weight, out vertices_at_weight))
             {
                 vertices_at_weight = new Dictionary<long, PathSegment<long>>();
-                _visit_list.Add(route.Weight, vertices_at_weight);
+                _visitList.Add(route.Weight, vertices_at_weight);
             }
             vertices_at_weight.Add(route.VertexId, route);
             _visited[route.VertexId] = route.Weight;
@@ -132,10 +132,10 @@ namespace OsmSharp.Routing.Graph.Router
         /// <returns></returns>
         public PathSegment<long> GetFirst()
         {
-            if (_visit_list.Count > 0)
+            if (_visitList.Count > 0)
             {
-                double weight = _visit_list.Keys[0];
-                Dictionary<long, PathSegment<long>> first_set = _visit_list[weight];
+                double weight = _visitList.Keys[0];
+                Dictionary<long, PathSegment<long>> first_set = _visitList[weight];
                 KeyValuePair<long, PathSegment<long>> first_pair =
                     first_set.First<KeyValuePair<long, PathSegment<long>>>();
                 long vertex_id = first_pair.Key;
@@ -144,7 +144,7 @@ namespace OsmSharp.Routing.Graph.Router
                 first_set.Remove(vertex_id);
                 if (first_set.Count == 0)
                 {
-                    _visit_list.Remove(weight);
+                    _visitList.Remove(weight);
                 }
                 _visited.Remove(vertex_id);
 
@@ -159,10 +159,10 @@ namespace OsmSharp.Routing.Graph.Router
         /// <returns></returns>
         public PathSegment<long> PeekFirst()
         {
-            if (_visit_list.Count > 0)
+            if (_visitList.Count > 0)
             {
-                double weight = _visit_list.Keys[0];
-                Dictionary<long, PathSegment<long>> first_set = _visit_list[weight];
+                double weight = _visitList.Keys[0];
+                Dictionary<long, PathSegment<long>> first_set = _visitList[weight];
                 KeyValuePair<long, PathSegment<long>> first_pair =
                     first_set.First<KeyValuePair<long, PathSegment<long>>>();
                 return first_pair.Value;
@@ -189,7 +189,7 @@ namespace OsmSharp.Routing.Graph.Router
         {
             double weight = _visited[vertex];
             Dictionary<long, PathSegment<long>> paths_at_weight =
-                _visit_list[weight];
+                _visitList[weight];
             return paths_at_weight[vertex];
         }
 
@@ -203,11 +203,11 @@ namespace OsmSharp.Routing.Graph.Router
             double weight = _visited[vertex];
             _visited.Remove(vertex);
             Dictionary<long, PathSegment<long>> paths_at_weight =
-                _visit_list[weight];
+                _visitList[weight];
             paths_at_weight.Remove(vertex);
             if (paths_at_weight.Count == 0)
             {
-                _visit_list.Remove(weight);
+                _visitList.Remove(weight);
             }
         }
 

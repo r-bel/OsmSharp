@@ -17,12 +17,12 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using OsmSharp.Routing.CH.PreProcessing;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.Interpreter;
 using System.Collections.Generic;
 using System;
 
-namespace OsmSharp.Routing.Routers
+namespace OsmSharp.Routing.BasicRouters
 {
     /// <summary>
     /// A version of the typedrouter using edges of type CHEdgeData.

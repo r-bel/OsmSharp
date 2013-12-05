@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 
 namespace OsmSharp.Routing.CH.Routing
 {

@@ -20,14 +20,15 @@ using System.Collections.Generic;
 using OsmSharp.Collections.Tags;
 using OsmSharp.Math.Geo;
 using OsmSharp.Math;
+using OsmSharp.Routing.Graph;
 
-namespace OsmSharp.Routing.Graph.Router
+namespace OsmSharp.Routing.BasicRouter
 {
     /// <summary>
     /// Abstracts a data source of a router that is a dynamic graph with an extra lookup function.
     /// </summary>
     /// <typeparam name="TEdgeData"></typeparam>
-    public interface IBasicRouterDataSource<TEdgeData> : IDynamicGraphReadOnly<TEdgeData>
+    public interface IBasicRouterDataSourceReadOnly<TEdgeData> : IDynamicGraphReadOnly<TEdgeData>
         where TEdgeData : IDynamicGraphEdgeData
     {
         /// <summary>
@@ -51,6 +52,23 @@ namespace OsmSharp.Routing.Graph.Router
         {
             get;
         }
+
+        /// <summary>
+        /// Gets an existing vertex.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        bool GetVertex(uint id, out float latitude, out float longitude);
+
+        /// <summary>
+        /// Returns all available meta-data about edges leaving the given vertex.
+        /// </summary>
+        /// <param name="vertex"></param>
+        /// <returns></returns>
+        KeyValuePair<uint, KeyValuePair<uint, uint>> GetEdgeMetaFromVertex(uint vertex);
+
+        #region Restrictions
 
         /// <summary>
         /// Adds a restriction to this graph by prohibiting the given route.
@@ -82,5 +100,7 @@ namespace OsmSharp.Routing.Graph.Router
         /// <param name="routes"></param>
         /// <returns></returns>
         bool TryGetRestrictionAsEnd(Vehicle vehicle, uint vertex, out List<uint[]> routes);
+
+        #endregion
     }
 }

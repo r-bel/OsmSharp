@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OsmSharp.Routing.Routers;
+using OsmSharp.Routing.BasicRouters;
 using OsmSharp.Math.VRP.Core;
 using OsmSharp.Units.Time;
 using OsmSharp.Math.VRP.Core.Routes;

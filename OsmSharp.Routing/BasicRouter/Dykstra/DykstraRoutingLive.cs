@@ -26,7 +26,7 @@ using OsmSharp.Routing.Constraints;
 using OsmSharp.Routing.Interpreter;
 using OsmSharp.Routing.Osm.Graphs;
 
-namespace OsmSharp.Routing.Graph.Router.Dykstra
+namespace OsmSharp.Routing.BasicRouter.Dykstra
 {
     /// <summary>
     /// A class containing a dykstra implementation suitable for a simple graph.

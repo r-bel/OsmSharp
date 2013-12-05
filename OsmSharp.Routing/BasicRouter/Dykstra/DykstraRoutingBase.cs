@@ -22,13 +22,13 @@ using OsmSharp.Math.Geo;
 using OsmSharp.Math.Primitives;
 using OsmSharp.Routing.Interpreter;
 
-namespace OsmSharp.Routing.Graph.Router.Dykstra
+namespace OsmSharp.Routing.BasicRouter.Dykstra
 {
     /// <summary>
     /// Contains generic fuctions common to all dykstra routers.
     /// </summary>
     public abstract class DykstraRoutingBase<TEdgeData>
-        where TEdgeData : IDynamicGraphEdgeData
+        where TEdgeData : IDykstraEdge
     {
         /// <summary>
         /// Creates a new basic dykstra router.

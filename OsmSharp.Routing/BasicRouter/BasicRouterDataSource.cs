@@ -22,8 +22,9 @@ using OsmSharp.Collections.Tags;
 using OsmSharp.Math.Geo;
 using OsmSharp.Math.Structures;
 using OsmSharp.Math.Structures.QTree;
+using OsmSharp.Routing.Graph;
 
-namespace OsmSharp.Routing.Graph.Router
+namespace OsmSharp.Routing.BasicRouter
 {
     /// <summary>
     /// A router data source that uses a IDynamicGraph as it's main datasource.
@@ -53,6 +54,16 @@ namespace OsmSharp.Routing.Graph.Router
         private readonly HashSet<Vehicle> _supportedVehicles;
 
         /// <summary>
+        /// Holds all vertice location.
+        /// </summary>
+        private readonly List<GeoCoordinate> _vertices;
+
+        /// <summary>
+        /// Holds all edge metadata.
+        /// </summary>
+        private Dictionary<uint, Dictionary<uint, uint>> _edgeMetaData;
+
+        /// <summary>
         /// Creates a new osm memory router data source.
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
@@ -61,37 +72,11 @@ namespace OsmSharp.Routing.Graph.Router
             if (tagsIndex == null) throw new ArgumentNullException("tagsIndex");
 
             _graph = new MemoryDynamicGraph<TEdgeData>();
+            _vertices = new List<GeoCoordinate>();
             _vertexIndex = new QuadTree<GeoCoordinate, uint>();
             _tagsIndex = tagsIndex;
 
             _supportedVehicles = new HashSet<Vehicle>();
-        }
-
-        /// <summary>
-        /// Creates a new osm memory router data source.
-        /// </summary>
-        /// <param name="graph"></param>
-        /// <param name="tagsIndex"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public DynamicGraphRouterDataSource(IDynamicGraph<TEdgeData> graph, ITagsCollectionIndexReadonly tagsIndex)
-        {
-            if (graph == null) throw new ArgumentNullException("graph");
-            if (tagsIndex == null) throw new ArgumentNullException("tagsIndex");
-
-            _graph = graph;
-            _vertexIndex = new QuadTree<GeoCoordinate, uint>();
-            _tagsIndex = tagsIndex;
-
-            _supportedVehicles = new HashSet<Vehicle>();
-
-            // add the current graph's vertices to the vertex index.
-            for (uint newVertexId = 1; newVertexId < graph.VertexCount + 1; newVertexId++)
-            {
-                // add to the CHRegions.
-                float latitude, longitude;
-                graph.GetVertex(newVertexId, out latitude, out longitude);
-                _vertexIndex.Add(new GeoCoordinate(latitude, longitude), newVertexId);
-            }
         }
 
         /// <summary>
@@ -140,6 +125,19 @@ namespace OsmSharp.Routing.Graph.Router
         }
 
         /// <summary>
+        /// Adds a new vertex location.
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        public uint AddVertexLocation(float latitude, float longitude)
+        {
+            uint id = (uint)_vertices.Count;
+            _vertices.Add(new GeoCoordinate(latitude, longitude));
+            return id;
+        }
+
+        /// <summary>
         /// Returns true if a given vertex is in the graph.
         /// </summary>
         /// <param name="id"></param>
@@ -148,7 +146,14 @@ namespace OsmSharp.Routing.Graph.Router
         /// <returns></returns>
         public bool GetVertex(uint id, out float latitude, out float longitude)
         {
-            return _graph.GetVertex(id, out latitude, out longitude);
+            latitude = 0;
+            longitude = 0;
+            if (_vertices.Count > id)
+            {
+                latitude = (float)_vertices[(int)id].Latitude;
+                longitude = (float)_vertices[(int)id].Longitude;
+            }
+            return false;
         }
 
         /// <summary>
@@ -170,35 +175,6 @@ namespace OsmSharp.Routing.Graph.Router
         public bool HasArc(uint vertexId, uint neighbour)
         {
             return _graph.HasArc(vertexId, neighbour);
-        }
-
-        /// <summary>
-        /// Adds a new vertex to this graph.
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <param name="neighboursEstimate"></param>
-        /// <returns></returns>
-        public uint AddVertex(float latitude, float longitude, byte neighboursEstimate)
-        {
-            uint vertex = _graph.AddVertex(latitude, longitude, neighboursEstimate);
-            _vertexIndex.Add(new GeoCoordinate(latitude, longitude),
-                vertex);
-            return vertex;
-        }
-
-        /// <summary>
-        /// Adds a new vertex.
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <returns></returns>
-        public uint AddVertex(float latitude, float longitude)
-        {
-            uint vertex = _graph.AddVertex(latitude, longitude);
-            _vertexIndex.Add(new GeoCoordinate(latitude, longitude),
-                vertex);
-            return vertex;
         }
 
         /// <summary>
@@ -239,7 +215,7 @@ namespace OsmSharp.Routing.Graph.Router
         /// </summary>
         public uint VertexCount
         {
-            get { return _graph.VertexCount; }
+            get { return (uint)_vertices.Count; }
         }
 
         #region Restriction
@@ -334,5 +310,16 @@ namespace OsmSharp.Routing.Graph.Router
         }
 
         #endregion
+
+        public void AddSupportedVehicle(Vehicle vehicle)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public KeyValuePair<uint, KeyValuePair<uint, uint>> GetEdgeMetaFromVertex(uint vertex)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -22,7 +22,7 @@ using OsmSharp.Collections.Tags;
 using OsmSharp.Math.Geo;
 using OsmSharp.Osm.Streams;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.Interpreter;
 using OsmSharp.Routing.Interpreter.Roads;
 using OsmSharp.Routing.Osm.Graphs;

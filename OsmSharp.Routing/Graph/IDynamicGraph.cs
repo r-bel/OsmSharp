@@ -24,22 +24,6 @@ namespace OsmSharp.Routing.Graph
     public interface IDynamicGraph<TEdgeData> : IDynamicGraphReadOnly<TEdgeData>
         where TEdgeData : IDynamicGraphEdgeData
     {
-        /// <summary>
-        /// Adds a vertex.
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <returns></returns>
-        uint AddVertex(float latitude, float longitude);
-
-        /// <summary>
-        /// Adds a vertex.
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <param name="neighboursEstimate"></param>
-        /// <returns></returns>
-        uint AddVertex(float latitude, float longitude, byte neighboursEstimate);
 
         /// <summary>
         /// Adds an arc with associated data.

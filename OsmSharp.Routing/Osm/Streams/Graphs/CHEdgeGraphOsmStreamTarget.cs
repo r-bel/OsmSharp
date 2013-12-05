@@ -23,7 +23,7 @@ using OsmSharp.Routing.CH.PreProcessing;
 using OsmSharp.Routing.CH.PreProcessing.Ordering;
 using OsmSharp.Routing.CH.PreProcessing.Witnesses;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.Interpreter.Roads;
 using OsmSharp.Routing.Osm.Interpreter;
 

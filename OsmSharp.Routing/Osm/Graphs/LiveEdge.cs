@@ -1,4 +1,5 @@
 ﻿using OsmSharp.Routing.Graph;
+using OsmSharp.Routing.BasicRouter.Dykstra;
 
 namespace OsmSharp.Routing.Osm.Graphs
 {
@@ -6,7 +7,7 @@ namespace OsmSharp.Routing.Osm.Graphs
     /// A simple edge containing the orignal OSM-tags and a flag indicating the direction of this edge relative to the 
     /// OSM-direction.
     /// </summary>
-    public class LiveEdge : IDynamicGraphEdgeData
+    public class LiveEdge : IDykstraEdge
     {
         /// <summary>
         /// Flag indicating if this is a forward or backward edge relative to the tag descriptions.

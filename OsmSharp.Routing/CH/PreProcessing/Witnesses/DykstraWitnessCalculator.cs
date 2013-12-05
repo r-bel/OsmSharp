@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using OsmSharp.Routing.CH.Routing;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Collections.PriorityQueues;
 using OsmSharp.Collections;
 

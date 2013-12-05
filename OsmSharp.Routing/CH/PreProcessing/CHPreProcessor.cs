@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 
 namespace OsmSharp.Routing.CH.PreProcessing
 {

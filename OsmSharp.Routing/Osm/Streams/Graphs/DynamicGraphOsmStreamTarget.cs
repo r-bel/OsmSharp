@@ -23,7 +23,7 @@ using OsmSharp.Osm;
 using OsmSharp.Osm.Cache;
 using OsmSharp.Osm.Streams;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.Interpreter.Roads;
 using OsmSharp.Routing.Osm.Interpreter;
 using OsmSharp.Osm.Streams.Filters;
@@ -344,7 +344,7 @@ namespace OsmSharp.Routing.Osm.Streams.Graphs
                 float[] coordinates;
                 if (_coordinates.TryGetValue(nodeId, out coordinates))
                 { // the coordinate is present.
-                    id = _dynamicGraph.AddVertex(
+                    id = _dynamicGraph.AddVertexLocation(
                         coordinates[0], coordinates[1]);
                     _coordinates.Remove(nodeId); // free the memory again!
 

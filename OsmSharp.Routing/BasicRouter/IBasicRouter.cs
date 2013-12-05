@@ -20,8 +20,9 @@ using System.Collections.Generic;
 using OsmSharp.Collections.Tags;
 using OsmSharp.Math.Geo;
 using OsmSharp.Routing.Interpreter;
+using OsmSharp.Routing.Graph;
 
-namespace OsmSharp.Routing.Graph.Router
+namespace OsmSharp.Routing.BasicRouter
 {
     /// <summary>
     /// Abstract a router that works on a dynamic graph.

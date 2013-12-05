@@ -24,10 +24,10 @@ using OsmSharp.UI.Renderer;
 using System.IO;
 using OsmSharp.Routing;
 using OsmSharp.UI.Renderer.Scene;
-using OsmSharp.Routing.Graph.Router;
 using OsmSharp.UI.Map.Styles;
 using OsmSharp.Routing.Osm.Graphs;
 using OsmSharp.Osm.Data;
+using OsmSharp.Routing.BasicRouter;
 
 namespace OsmSharp.UI.Map
 {

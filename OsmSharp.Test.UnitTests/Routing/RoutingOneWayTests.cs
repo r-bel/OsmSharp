@@ -19,8 +19,8 @@
 using NUnit.Framework;
 using OsmSharp.Math.Geo;
 using OsmSharp.Routing;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Router;
 using OsmSharp.Routing.Interpreter;
 using OsmSharp.Routing.Osm.Interpreter;
 

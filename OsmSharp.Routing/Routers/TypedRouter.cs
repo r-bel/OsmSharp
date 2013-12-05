@@ -626,22 +626,20 @@ namespace OsmSharp.Routing.BasicRouters
 
             if (vertex1 > 0 && vertex2 > 0)
             { // none of the vertixes was a resolved vertex.
-                KeyValuePair<uint, TEdgeData>[] arcs = _dataGraph.GetArcs(Convert.ToUInt32(vertex1));
-                foreach (KeyValuePair<uint, TEdgeData> arc in arcs)
+                List<KeyValuePair<uint, uint>> arcs = _dataGraph.GetArcsMeta(Convert.ToUInt32(vertex1));
+                foreach (KeyValuePair<uint, uint> arc in arcs)
                 {
                     if (arc.Key == vertex2)
                     {
                         return arc.Value;
                     }
                 }
-                arcs = _dataGraph.GetArcs(Convert.ToUInt32(vertex2));
-                foreach (KeyValuePair<uint, TEdgeData> arc in arcs)
+                arcs = _dataGraph.GetArcsMeta(Convert.ToUInt32(vertex2));
+                foreach (KeyValuePair<uint, uint> arc in arcs)
                 {
                     if (arc.Key == vertex1)
                     {
-                        var edge = new TypedRouterResolvedGraph.RouterResolvedGraphEdge(
-                            arc.Value.Tags, !arc.Value.Forward);
-                        return edge;
+                        return arc.Value;
                     }
                 }
             }
@@ -653,7 +651,7 @@ namespace OsmSharp.Routing.BasicRouters
                 {
                     if (arc.Key == vertex2)
                     {
-                        return arc.Value;
+                        return arc.Value.Tags;
                     }
                 }
             }

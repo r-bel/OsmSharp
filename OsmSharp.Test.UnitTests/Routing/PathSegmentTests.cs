@@ -17,7 +17,7 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using NUnit.Framework;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.BasicRouter;
 
 namespace OsmSharp.Test.Unittests.Routing
 {

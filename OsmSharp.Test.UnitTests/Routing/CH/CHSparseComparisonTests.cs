@@ -23,14 +23,13 @@ using OsmSharp.Collections.Tags;
 using OsmSharp.Osm.Streams.Filters;
 using OsmSharp.Osm.Xml.Streams;
 using OsmSharp.Routing;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.CH;
 using OsmSharp.Routing.CH.PreProcessing;
 using OsmSharp.Routing.CH.PreProcessing.Ordering.LimitedLevelOrdering;
 using OsmSharp.Routing.CH.PreProcessing.Witnesses;
-using OsmSharp.Routing.Graph;
 using OsmSharp.Routing.Osm.Interpreter;
 using OsmSharp.Routing.Osm.Streams.Graphs;
-using OsmSharp.Routing.Graph.Router;
 
 namespace OsmSharp.Test.Unittests.Routing.CH
 {

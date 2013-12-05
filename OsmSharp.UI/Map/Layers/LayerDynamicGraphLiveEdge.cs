@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using OsmSharp.Math.Geo;
 using OsmSharp.Osm;
-using OsmSharp.Routing.Graph.Router;
 using OsmSharp.Routing.Osm.Graphs;
 using OsmSharp.UI.Map.Styles;
 using OsmSharp.UI.Renderer;
 using OsmSharp.UI.Renderer.Scene;
+using OsmSharp.Routing.BasicRouter;
 
 namespace OsmSharp.UI.Map.Layers
 {

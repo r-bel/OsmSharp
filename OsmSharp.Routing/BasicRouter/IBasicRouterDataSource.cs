@@ -17,6 +17,7 @@
 // along with OsmSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using OsmSharp.Routing.Graph;
+using System.Collections.Generic;
 namespace OsmSharp.Routing.BasicRouter
 {
     /// <summary>
@@ -30,7 +31,7 @@ namespace OsmSharp.Routing.BasicRouter
         /// Adds the given vehicle as a supported vehicle profile.
         /// </summary>
         /// <param name="vehicle"></param>
-        void AddSupportedVehicle(Vehicle vehicle);
+        void AddSupportedProfile(Vehicle vehicle);
 
         /// <summary>
         /// Adds a vertex.
@@ -39,5 +40,19 @@ namespace OsmSharp.Routing.BasicRouter
         /// <param name="longitude"></param>
         /// <returns></returns>
         uint AddVertexLocation(float latitude, float longitude);
+
+        /// <summary>
+        /// Returns all vertices that have meta-data associated.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<uint> GetVerticesMeta();
+
+        /// <summary>
+        /// Adds arc meta data.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="tags"></param>
+        void AddArcMeta(uint from, uint to, uint tags);
     }
 }

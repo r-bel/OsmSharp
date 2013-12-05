@@ -61,7 +61,7 @@ namespace OsmSharp.Routing.BasicRouter
         /// <summary>
         /// Holds all edge metadata.
         /// </summary>
-        private Dictionary<uint, Dictionary<uint, uint>> _edgeMetaData;
+        private readonly Dictionary<uint, List<KeyValuePair<uint, uint>>> _arcMetaData;
 
         /// <summary>
         /// Creates a new osm memory router data source.
@@ -74,6 +74,7 @@ namespace OsmSharp.Routing.BasicRouter
             _graph = new MemoryDynamicGraph<TEdgeData>();
             _vertices = new List<GeoCoordinate>();
             _vertexIndex = new QuadTree<GeoCoordinate, uint>();
+            _arcMetaData = new Dictionary<uint, List<KeyValuePair<uint, uint>>>();
             _tagsIndex = tagsIndex;
 
             _supportedVehicles = new HashSet<Vehicle>();
@@ -218,6 +219,66 @@ namespace OsmSharp.Routing.BasicRouter
             get { return (uint)_vertices.Count; }
         }
 
+        /// <summary>
+        /// Returns all vertices that have meta-data associated.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<uint> GetVerticesMeta()
+        {
+            return _arcMetaData.Keys;
+        }
+
+        /// <summary>
+        /// Returns all available meta-data about arcs leaving the given vertex.
+        /// </summary>
+        /// <param name="vertex"></param>
+        /// <returns></returns>
+        public List<KeyValuePair<uint, uint>> GetArcsMeta(uint vertex)
+        {
+            List<KeyValuePair<uint, uint>> arcsMeta;
+            if (_arcMetaData.TryGetValue(vertex, out arcsMeta))
+            { // meta data found!
+                return arcsMeta;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Adds an arc with meta-data.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="tags"></param>
+        public void AddArcMeta(uint from, uint to, uint tags)
+        {
+            List<KeyValuePair<uint, uint>> arcsMeta;
+            if (!_arcMetaData.TryGetValue(from, out arcsMeta))
+            { // meta data found!
+                arcsMeta = new List<KeyValuePair<uint, uint>>();
+                _arcMetaData.Add(from, arcsMeta);
+            }
+            arcsMeta.Add(new KeyValuePair<uint, uint>(to, tags));
+        }
+
+        /// <summary>
+        /// Detelets all meta-data related to the given arc.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        public void DeleteArcMeta(uint from, uint to)
+        {
+            List<KeyValuePair<uint, uint>> arcsMeta;
+            if (_arcMetaData.TryGetValue(from, out arcsMeta))
+            { // meta data found!
+                arcsMeta.RemoveAll(x => (x.Key == from && x.Value == to));
+
+                if (arcsMeta.Count == 0)
+                { // no more arcs left from the start vertex.
+                    _arcMetaData.Remove(from);
+                }
+            }
+        }
+
         #region Restriction
 
         /// <summary>
@@ -310,16 +371,5 @@ namespace OsmSharp.Routing.BasicRouter
         }
 
         #endregion
-
-        public void AddSupportedVehicle(Vehicle vehicle)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public KeyValuePair<uint, KeyValuePair<uint, uint>> GetEdgeMetaFromVertex(uint vertex)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

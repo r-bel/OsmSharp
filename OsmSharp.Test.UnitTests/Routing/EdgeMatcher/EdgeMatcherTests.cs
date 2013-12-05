@@ -9,10 +9,10 @@ using OsmSharp.Routing.Graph;
 using OsmSharp.Routing.Osm.Graphs;
 using OsmSharp.Routing.Osm.Interpreter;
 using OsmSharp.Routing.Interpreter;
-using OsmSharp.Routing.Graph.Router;
 using OsmSharp.Collections.Tags;
 using OsmSharp.Math.Geo;
-using OsmSharp.Routing.Graph.Router.Dykstra;
+using OsmSharp.Routing.BasicRouter;
+using OsmSharp.Routing.BasicRouter.Dykstra;
 
 namespace OsmSharp.Test.Unittests.Routing.EdgeMatcher
 {
@@ -232,8 +232,8 @@ namespace OsmSharp.Test.Unittests.Routing.EdgeMatcher
 
             // do the data processing.
             var data = new DynamicGraphRouterDataSource<LiveEdge>(tagsIndex);
-            uint vertexNoname1 = data.AddVertex((float)fromNoname.Latitude, (float)fromNoname.Longitude);
-            uint vertexNoname2 = data.AddVertex((float)toNoname.Latitude, (float)toNoname.Longitude);
+            uint vertexNoname1 = data.AddVertexLocation((float)fromNoname.Latitude, (float)fromNoname.Longitude);
+            uint vertexNoname2 = data.AddVertexLocation((float)toNoname.Latitude, (float)toNoname.Longitude);
             data.AddArc(vertexNoname1, vertexNoname2, new LiveEdge()
             {
                 Forward = true,
@@ -242,8 +242,8 @@ namespace OsmSharp.Test.Unittests.Routing.EdgeMatcher
             tags = new TagsCollection();
             tags["highway"] = highway;
             tags["name"] = name;
-            uint vertexName1 = data.AddVertex((float)fromName.Latitude, (float)fromName.Longitude);
-            uint vertexName2 = data.AddVertex((float)toName.Latitude, (float)toName.Longitude);
+            uint vertexName1 = data.AddVertexLocation((float)fromName.Latitude, (float)fromName.Longitude);
+            uint vertexName2 = data.AddVertexLocation((float)toName.Latitude, (float)toName.Longitude);
             data.AddArc(vertexName1, vertexName2, new LiveEdge()
             {
                 Forward = true,

@@ -22,9 +22,9 @@ using OsmSharp.Math.Geo;
 using OsmSharp.Math.Primitives;
 using OsmSharp.Routing;
 using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Router;
 using OsmSharp.Routing.Interpreter;
 using OsmSharp.Routing.Osm.Interpreter;
+using OsmSharp.Routing.BasicRouter;
 
 namespace OsmSharp.Test.Unittests.Routing
 {

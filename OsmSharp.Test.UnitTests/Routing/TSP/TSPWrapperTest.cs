@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using OsmSharp.Routing;
-using NUnit.Framework;
+﻿using System.Collections.Generic;
 using System.IO;
-using OsmSharp.Routing.Osm.Interpreter;
-using OsmSharp.Collections.Tags;
-using OsmSharp.Routing.Graph;
+using System.Reflection;
+using NUnit.Framework;
 using OsmSharp.IO.DelimitedFiles;
-using OsmSharp.Routing.Routers;
 using OsmSharp.Math.Geo;
+using OsmSharp.Osm.Xml.Streams;
+using OsmSharp.Routing;
+using OsmSharp.Routing.Osm.Interpreter;
 using OsmSharp.Routing.TSP;
 using OsmSharp.Routing.TSP.Genetic;
-using OsmSharp.Routing.Osm.Graphs;
-using OsmSharp.Osm.Streams.Filters;
-using OsmSharp.Osm.Xml.Streams;
 
 namespace OsmSharp.Test.Unittests.Routing.TSP
 {

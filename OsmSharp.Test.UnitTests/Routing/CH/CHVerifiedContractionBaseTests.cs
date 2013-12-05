@@ -21,21 +21,19 @@ using System.IO;
 using System.Reflection;
 using NUnit.Framework;
 using OsmSharp.Collections.Tags;
+using OsmSharp.Math.Geo;
 using OsmSharp.Osm.Streams.Filters;
 using OsmSharp.Osm.Xml.Streams;
 using OsmSharp.Routing;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.CH;
 using OsmSharp.Routing.CH.PreProcessing;
 using OsmSharp.Routing.CH.PreProcessing.Ordering;
 using OsmSharp.Routing.CH.PreProcessing.Witnesses;
-using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Graph.Router;
+using OsmSharp.Routing.Osm.Graphs;
 using OsmSharp.Routing.Osm.Interpreter;
 using OsmSharp.Routing.Osm.Streams.Graphs;
-using OsmSharp.Routing.Osm.Graphs;
-using OsmSharp.Routing.Interpreter;
-using OsmSharp.Routing.Graph.Router.Dykstra;
-using OsmSharp.Math.Geo;
+using OsmSharp.Routing.BasicRouter.Dykstra;
 
 namespace OsmSharp.Test.Unittests.Routing.CH
 {

@@ -21,14 +21,14 @@ using OsmSharp.Osm.Streams.Filters;
 using OsmSharp.Routing;
 using OsmSharp.Routing.Graph;
 using OsmSharp.Routing.Interpreter;
-using OsmSharp.Routing.Graph.Router;
-using OsmSharp.Routing.Graph.Router.Dykstra;
 using System.Reflection;
 using OsmSharp.Routing.Osm.Graphs;
 using OsmSharp.Collections.Tags;
 using OsmSharp.Routing.Osm.Streams.Graphs;
 using OsmSharp.Osm.Xml.Streams;
 using OsmSharp.Routing.Osm.Interpreter;
+using OsmSharp.Routing.BasicRouter;
+using OsmSharp.Routing.BasicRouter.Dykstra;
 
 namespace OsmSharp.Test.Unittests.Routing.Dykstra
 {

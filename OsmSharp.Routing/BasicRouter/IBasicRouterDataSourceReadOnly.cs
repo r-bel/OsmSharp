@@ -62,11 +62,11 @@ namespace OsmSharp.Routing.BasicRouter
         bool GetVertex(uint id, out float latitude, out float longitude);
 
         /// <summary>
-        /// Returns all available meta-data about edges leaving the given vertex.
+        /// Returns all available meta-data about arcs leaving the given vertex.
         /// </summary>
         /// <param name="vertex"></param>
         /// <returns></returns>
-        KeyValuePair<uint, KeyValuePair<uint, uint>> GetEdgeMetaFromVertex(uint vertex);
+        List<KeyValuePair<uint, uint>> GetArcsMeta(uint vertex);
 
         #region Restrictions
 

@@ -42,7 +42,7 @@ namespace OsmSharp.Routing.BasicRouters
         /// <summary>
         /// Holds the graph object containing the routable network.
         /// </summary>
-        private readonly IBasicRouterDataSource<TEdgeData> _dataGraph;
+        private readonly IBasicRouterDataSourceReadOnly<TEdgeData> _dataGraph;
 
         /// <summary>
         /// Holds the basic router that works on the dynamic graph.
@@ -60,7 +60,7 @@ namespace OsmSharp.Routing.BasicRouters
         /// <param name="graph"></param>
         /// <param name="interpreter"></param>
         /// <param name="router"></param>
-        public TypedRouter(IBasicRouterDataSource<TEdgeData> graph, IRoutingInterpreter interpreter,
+        public TypedRouter(IBasicRouterDataSourceReadOnly<TEdgeData> graph, IRoutingInterpreter interpreter,
             IBasicRouter<TEdgeData> router)
         {
             _dataGraph = graph;
@@ -82,7 +82,7 @@ namespace OsmSharp.Routing.BasicRouters
         /// <summary>
         /// Returns the data.
         /// </summary>
-        protected IBasicRouterDataSource<TEdgeData> Data
+        protected IBasicRouterDataSourceReadOnly<TEdgeData> Data
         {
             get { return _dataGraph; }
         }
@@ -489,12 +489,12 @@ namespace OsmSharp.Routing.BasicRouters
                 // get all the data needed to calculate the next route entry.
                 long nodeCurrent = vertices[idx];
                 //long nodeNext = vertices[idx + 1];
-                IDynamicGraphEdgeData edge = this.GetEdgeData(vehicle, nodePrevious, nodeCurrent);
+                uint tagsId = this.GetEdgeData(vehicle, nodePrevious, nodeCurrent);
 
                 // FIRST CALCULATE ALL THE ENTRY METRICS!
 
                 // STEP1: Get the names.
-                TagsCollectionBase currentTags = _dataGraph.TagsIndex.Get(edge.Tags);
+                TagsCollectionBase currentTags = _dataGraph.TagsIndex.Get(tagsId);
                 string name = _interpreter.EdgeInterpreter.GetName(currentTags);
                 Dictionary<string, string> names = _interpreter.EdgeInterpreter.GetNamesInAllLanguages(currentTags);
 
@@ -514,8 +514,9 @@ namespace OsmSharp.Routing.BasicRouters
                             {
                                 var sideStreet = new RoutePointEntrySideStreet();
 
+                                tagsId = this.GetEdgeData(vehicle, nodeCurrent, neighbour.Key);
                                 GeoCoordinate neighbourCoordinate = this.GetCoordinate(vehicle, neighbour.Key);
-                                TagsCollectionBase tags = _dataGraph.TagsIndex.Get(neighbour.Value.Tags);
+                                TagsCollectionBase tags = _dataGraph.TagsIndex.Get(tagsId);
 
                                 sideStreet.Latitude = (float)neighbourCoordinate.Latitude;
                                 sideStreet.Longitude = (float)neighbourCoordinate.Longitude;
@@ -551,8 +552,8 @@ namespace OsmSharp.Routing.BasicRouters
             if (vertices.Length > 1)
             {
                 int last_idx = vertices.Length - 1;
-                IDynamicGraphEdgeData edge = this.GetEdgeData(vehicle, vertices[last_idx - 1], vertices[last_idx]);
-                TagsCollectionBase tags = _dataGraph.TagsIndex.Get(edge.Tags);
+                uint tagsId = this.GetEdgeData(vehicle, vertices[last_idx - 1], vertices[last_idx]);
+                TagsCollectionBase tags = _dataGraph.TagsIndex.Get(tagsId);
                 coordinate = this.GetCoordinate(vehicle, vertices[last_idx]);
                 var last = new RoutePointEntry();
                 last.Latitude = (float)coordinate.Latitude;
@@ -618,7 +619,7 @@ namespace OsmSharp.Routing.BasicRouters
         /// <param name="vertex1"></param>
         /// <param name="vertex2"></param>
         /// <returns></returns>
-        private IDynamicGraphEdgeData GetEdgeData(Vehicle vehicle, long vertex1, long vertex2)
+        private uint GetEdgeData(Vehicle vehicle, long vertex1, long vertex2)
         {
             // get the resolved graph for the given profile.
             TypedRouterResolvedGraph graph = this.GetForProfile(vehicle);
@@ -1169,11 +1170,12 @@ namespace OsmSharp.Routing.BasicRouters
                         }
 
                         // add the arc (in both directions)
-                        graph.AddArc(vertex1, vertex2, 
-                            new TypedRouterResolvedGraph.RouterResolvedGraphEdge(arc.Value.Value.Tags,
+                        uint tagsId = this.GetEdgeData(vehicle, vertex1, vertex2);
+                        graph.AddArc(vertex1, vertex2,
+                            new TypedRouterResolvedGraph.RouterResolvedGraphEdge(tagsId,
                                                                                  arc.Value.Value.Forward));
                         graph.AddArc(vertex2, vertex1, 
-                            new TypedRouterResolvedGraph.RouterResolvedGraphEdge(arc.Value.Value.Tags,
+                            new TypedRouterResolvedGraph.RouterResolvedGraphEdge(tagsId,
                                                                                 !arc.Value.Value.Forward));
 
                         // create the route manually.

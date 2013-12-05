@@ -50,7 +50,7 @@ namespace OsmSharp.Routing.BasicRouter.Dykstra
         /// <param name="matcher"></param>
         /// <param name="pointTags"></param>
         /// <param name="interpreter"></param>
-        public SearchClosestResult SearchClosest(IBasicRouterDataSource<TEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
+        public SearchClosestResult SearchClosest(IBasicRouterDataSourceReadOnly<TEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
             GeoCoordinate coordinate, float delta, IEdgeMatcher matcher, TagsCollectionBase pointTags)
         {
             return this.SearchClosest(graph, interpreter, vehicle, coordinate, delta, matcher, pointTags, false);
@@ -67,7 +67,7 @@ namespace OsmSharp.Routing.BasicRouter.Dykstra
         /// <param name="pointTags"></param>
         /// <param name="interpreter"></param>
         /// <param name="verticesOnly"></param>
-        public SearchClosestResult SearchClosest(IBasicRouterDataSource<TEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
+        public SearchClosestResult SearchClosest(IBasicRouterDataSourceReadOnly<TEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
             GeoCoordinate coordinate, float delta, IEdgeMatcher matcher, TagsCollectionBase pointTags, bool verticesOnly)
         {
             var closestWithMatch = new SearchClosestResult(double.MaxValue, 0);

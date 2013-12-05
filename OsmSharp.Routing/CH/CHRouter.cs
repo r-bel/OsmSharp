@@ -54,7 +54,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="target"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public PathSegment<long> Calculate(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter, 
+        public PathSegment<long> Calculate(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter, 
             Vehicle vehicle, PathSegmentVisitList source, PathSegmentVisitList target, double max)
         {
             // do the basic CH calculations.
@@ -73,7 +73,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="maxSearch"></param>
         /// <param name="graph"></param>
         /// <returns></returns>
-        public PathSegment<long>[][] CalculateManyToMany(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle, 
+        public PathSegment<long>[][] CalculateManyToMany(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle, 
             PathSegmentVisitList[] sources, PathSegmentVisitList[] targets, double maxSearch)
         {
             var results = new PathSegment<long>[sources.Length][];
@@ -101,7 +101,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="target"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public double CalculateWeight(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
+        public double CalculateWeight(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
             PathSegmentVisitList source, PathSegmentVisitList target, double max)
         {
             // do the basic CH calculations.
@@ -124,7 +124,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="targets"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public PathSegment<long> CalculateToClosest(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
+        public PathSegment<long> CalculateToClosest(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
             PathSegmentVisitList source, PathSegmentVisitList[] targets, double max)
         {
             throw new NotSupportedException();
@@ -140,7 +140,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="targets"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public double[] CalculateOneToManyWeight(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
+        public double[] CalculateOneToManyWeight(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
             PathSegmentVisitList source, PathSegmentVisitList[] targets, double max)
         {
             double[][] manyToManyResult = this.CalculateManyToManyWeight(
@@ -159,7 +159,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="targets"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public double[][] CalculateManyToManyWeight(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
+        public double[][] CalculateManyToManyWeight(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
             PathSegmentVisitList[] sources, PathSegmentVisitList[] targets, double max)
         {
             return this.DoCalculateManyToMany(
@@ -183,7 +183,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="source"></param>
         /// <param name="weight"></param>
         /// <returns></returns>
-        public HashSet<long> CalculateRange(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
+        public HashSet<long> CalculateRange(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
             PathSegmentVisitList source, double weight)
         {
             throw new NotSupportedException("Check IsCalculateRangeSupported before using this functionality!");
@@ -198,7 +198,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="source"></param>
         /// <param name="weight"></param>
         /// <returns></returns>
-        public bool CheckConnectivity(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
+        public bool CheckConnectivity(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter, Vehicle vehicle,
             PathSegmentVisitList source, double weight)
         {
             return this.DoCheckConnectivity(graph, source, weight, int.MaxValue);
@@ -208,53 +208,6 @@ namespace OsmSharp.Routing.CH
 
         #region Bi-directional Many-to-Many
 
-        ///// <summary>
-        ///// Calculates all the weights between all the vertices.
-        ///// </summary>
-        ///// <param name="froms"></param>
-        ///// <param name="tos"></param>
-        ///// <returns></returns>
-        //public float[][] CalculateManyToManyWeights(uint[] froms, uint[] tos)
-        //{
-        //    // TODO: implement switching of from/to when to < from.
-
-        //    // keep a list of distances to the given vertices while performance backward search.
-        //    Dictionary<uint, Dictionary<uint, float>> buckets = new Dictionary<uint, Dictionary<uint, float>>();
-        //    for (int idx = 0; idx < tos.Length; idx++)
-        //    {
-        //        this.SearchBackwardIntoBucket(buckets, tos[idx]);
-
-        //        // report progress.
-        //        OsmSharp.IO.Output.OutputStreamHost.ReportProgress(idx, tos.Length, "Router.CH.CalculateManyToManyWeights",
-        //            "Calculating backward...");
-        //    }
-
-        //    // conduct a forward search from each source.
-        //    float[][] weights = new float[froms.Length][];
-        //    for (int idx = 0; idx < froms.Length; idx++)
-        //    {
-        //        uint from = froms[idx];
-
-        //        // calculate all from's.
-        //        Dictionary<uint, float> result =
-        //            this.SearchForwardFromBucket(buckets, from, tos);
-
-        //        float[] to_weights = new float[tos.Length];
-        //        for (int to_idx = 0; to_idx < tos.Length; to_idx++)
-        //        {
-        //            to_weights[to_idx] = result[tos[to_idx]];
-        //        }
-
-        //        weights[idx] = to_weights;
-        //        result.Clear();
-
-        //        // report progress.
-        //        OsmSharp.IO.Output.OutputStreamHost.ReportProgress(idx, tos.Length, "Router.CH.CalculateManyToManyWeights",
-        //            "Calculating forward...");
-        //    }
-        //    return weights;
-        //}
-
         /// <summary>
         /// Searches backwards and puts the weigths from the to-vertex into the buckets list.
         /// </summary>
@@ -262,7 +215,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="buckets"></param>
         /// <param name="toVisitList"></param>
         /// <returns></returns>
-        private long SearchBackwardIntoBucket(IBasicRouterDataSource<CHEdgeData> graph, Dictionary<long, Dictionary<long, double>> buckets, 
+        private long SearchBackwardIntoBucket(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, Dictionary<long, Dictionary<long, double>> buckets, 
             PathSegmentVisitList toVisitList)
         {
             long? to = null;
@@ -367,7 +320,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="buckets"></param>
         /// <param name="fromVisitList"></param>
         /// <param name="tos"></param>
-        private Dictionary<long, double> SearchForwardFromBucket(IBasicRouterDataSource<CHEdgeData> graph, Dictionary<long, Dictionary<long, double>> buckets,
+        private Dictionary<long, double> SearchForwardFromBucket(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, Dictionary<long, Dictionary<long, double>> buckets,
             PathSegmentVisitList fromVisitList, long[] tos)
         {
             long? from = null;
@@ -532,7 +485,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="max_settles"></param>
         /// <param name="exception"></param>
         /// <returns></returns>
-        private CHResult DoCalculate(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter,
+        private CHResult DoCalculate(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter,
             PathSegmentVisitList source, PathSegmentVisitList target, double max, int max_settles, long exception)
         {
             // keep settled vertices.
@@ -672,7 +625,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="max"></param>
         /// <param name="maxSettles"></param>
         /// <returns></returns>
-        private double[][] DoCalculateManyToMany(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter,
+        private double[][] DoCalculateManyToMany(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter,
             PathSegmentVisitList[] sources, PathSegmentVisitList[] targets, double max, int maxSettles)
         {
             // TODO: implement switching of from/to when to < from.
@@ -723,7 +676,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="to"></param>
         /// <param name="exception"></param>
         /// <returns></returns>
-        public double CalculateWeight(IBasicRouterDataSource<CHEdgeData> graph, uint from, uint to, uint exception)
+        public double CalculateWeight(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, uint from, uint to, uint exception)
         {
             return this.CalculateWeight(graph, from, to, exception, double.MaxValue);
         }
@@ -737,7 +690,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="exception"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public double CalculateWeight(IBasicRouterDataSource<CHEdgeData> graph, uint from, uint to, uint exception, double max)
+        public double CalculateWeight(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, uint from, uint to, uint exception, double max)
         {
             // calculate the result.
             CHResult result = this.CalculateInternal(graph, from, to, exception, max, int.MaxValue);
@@ -760,7 +713,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="max"></param>
         /// <param name="maxSettles"></param>
         /// <returns></returns>
-        public double CalculateWeight(IBasicRouterDataSource<CHEdgeData> graph, uint from, uint to, uint exception, double max, int maxSettles)
+        public double CalculateWeight(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, uint from, uint to, uint exception, double max, int maxSettles)
         {
             // calculate the result.
             CHResult result = this.CalculateInternal(graph, from, to, exception, max, maxSettles);
@@ -780,7 +733,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="source"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public bool CheckConnectivity(IBasicRouterDataSource<CHEdgeData> graph, PathSegmentVisitList source, double max)
+        public bool CheckConnectivity(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, PathSegmentVisitList source, double max)
         {
             return this.DoCheckConnectivity(graph, source, max, int.MaxValue);
         }
@@ -792,7 +745,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="source"></param>
         /// <param name="maxSettles"></param>
         /// <returns></returns>
-        public bool CheckConnectivity(IBasicRouterDataSource<CHEdgeData> graph, PathSegmentVisitList source, int maxSettles)
+        public bool CheckConnectivity(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, PathSegmentVisitList source, int maxSettles)
         {
             return this.DoCheckConnectivity(graph, source, double.MaxValue, maxSettles);
         }
@@ -807,7 +760,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="max"></param>
         /// <param name="maxSettles"></param>
         /// <returns></returns>
-        private CHResult CalculateInternal(IBasicRouterDataSource<CHEdgeData> graph, uint from, uint to, uint exception, double max, int maxSettles)
+        private CHResult CalculateInternal(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, uint from, uint to, uint exception, double max, int maxSettles)
         {
             // keep settled vertices.
             var settledVertices = new CHQueue();
@@ -896,7 +849,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="max"></param>
         /// <param name="maxSettles"></param>
         /// <returns></returns>
-        private bool DoCheckConnectivity(IBasicRouterDataSource<CHEdgeData> graph, PathSegmentVisitList source, double max, int maxSettles)
+        private bool DoCheckConnectivity(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, PathSegmentVisitList source, double max, int maxSettles)
         {
             // keep settled vertices.
             CHQueue settledVertices = new CHQueue();
@@ -1022,7 +975,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="queue"></param>
         /// <param name="exception"></param>
         /// <returns></returns>
-        private void SearchForward(IBasicRouterDataSource<CHEdgeData> graph, CHQueue settledQueue, IPriorityQueue<PathSegment<long>> queue,
+        private void SearchForward(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, CHQueue settledQueue, IPriorityQueue<PathSegment<long>> queue,
                                    long exception)
         {
             // get the current vertex with the smallest weight.
@@ -1096,7 +1049,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="queue"></param>
         /// <param name="exception"></param>
         /// <returns></returns>
-        private void SearchBackward(IBasicRouterDataSource<CHEdgeData> graph, CHQueue settledQueue, IPriorityQueue<PathSegment<long>> queue,
+        private void SearchBackward(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, CHQueue settledQueue, IPriorityQueue<PathSegment<long>> queue,
                                     long exception)
         {
             // get the current vertex with the smallest weight.
@@ -1173,7 +1126,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="graph"></param>
         /// <param name="result"></param>
         /// <returns></returns>
-        private PathSegment<long> ExpandBestResult(IBasicRouterDataSource<CHEdgeData> graph, CHResult result)
+        private PathSegment<long> ExpandBestResult(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, CHResult result)
         {
             // construct the route.
             PathSegment<long> route = result.Forward;
@@ -1195,7 +1148,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="graph"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        private PathSegment<long> ExpandPath(IBasicRouterDataSource<CHEdgeData> graph, PathSegment<long> path)
+        private PathSegment<long> ExpandPath(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, PathSegment<long> path)
         {
             // construct the full CH path.
             PathSegment<long> current = path;
@@ -1235,7 +1188,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="graph"></param>
         /// <param name="edge"></param>
         /// <returns></returns>
-        private PathSegment<long> ConvertArc(IBasicRouterDataSource<CHEdgeData> graph, PathSegment<long> edge)
+        private PathSegment<long> ConvertArc(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, PathSegment<long> edge)
         {
             if (edge.VertexId < 0 || edge.From.VertexId < 0)
             { // these edges are not part of the regular network!
@@ -1283,7 +1236,7 @@ namespace OsmSharp.Routing.CH
             }
         }
 
-        private PathSegment<long> ConvertArc(IBasicRouterDataSource<CHEdgeData> graph, PathSegment<long> edge,
+        private PathSegment<long> ConvertArc(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, PathSegment<long> edge,
                                          uint vertexFromId, uint vertexContractedId, uint vertexToId)
         {
             // check if the arc is a shortcut.
@@ -1357,7 +1310,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="graph"></param>
         /// <param name="interpreter"></param>
         /// <param name="pointTags"></param>
-        public SearchClosestResult SearchClosest(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter,
+        public SearchClosestResult SearchClosest(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter,
             Vehicle vehicle, GeoCoordinate coordinate, float delta, IEdgeMatcher matcher, TagsCollectionBase pointTags)
         {
             return this.SearchClosest(graph, interpreter, vehicle, coordinate, delta, matcher, pointTags, false);
@@ -1374,7 +1327,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="interpreter"></param>
         /// <param name="pointTags"></param>
         /// <param name="verticesOnly"></param>
-        public SearchClosestResult SearchClosest(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter,
+        public SearchClosestResult SearchClosest(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter,
             Vehicle vehicle, GeoCoordinate coordinate, float delta, IEdgeMatcher matcher, TagsCollectionBase pointTags, bool verticesOnly)
         {
             // first try a very small area.
@@ -1399,7 +1352,7 @@ namespace OsmSharp.Routing.CH
         /// <param name="pointTags"></param>
         /// <param name="verticesOnly"></param>
         /// <returns></returns>
-        private SearchClosestResult DoSearchClosest(IBasicRouterDataSource<CHEdgeData> graph, IRoutingInterpreter interpreter,
+        private SearchClosestResult DoSearchClosest(IBasicRouterDataSourceReadOnly<CHEdgeData> graph, IRoutingInterpreter interpreter,
             Vehicle vehicle, GeoCoordinate coordinate, float delta, IEdgeMatcher matcher, TagsCollectionBase pointTags, bool verticesOnly)
         {
             double searchBoxSize = delta;
@@ -1579,6 +1532,5 @@ namespace OsmSharp.Routing.CH
         }
 
         #endregion
-
     }
 }

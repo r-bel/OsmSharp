@@ -64,7 +64,7 @@ namespace OsmSharp.Test.Unittests.Routing.CH.Serialization.Sorted
             for (uint vertexId = 1; vertexId < original.VertexCount + 1; vertexId++)
             {
                 float latitude, longitude;
-                if (original.GetVertex(vertexId, out latitude, out longitude))
+                if (original.GetVertexLocation(vertexId, out latitude, out longitude))
                 {
                     Assert.IsTrue(vertices.Contains(vertexId));
                 }

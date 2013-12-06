@@ -22,11 +22,11 @@ using OsmSharp.Math.Geo;
 using OsmSharp.Osm;
 using OsmSharp.Osm.Cache;
 using OsmSharp.Osm.Streams;
-using OsmSharp.Routing.Graph;
+using OsmSharp.Osm.Streams.Filters;
 using OsmSharp.Routing.BasicRouter;
+using OsmSharp.Routing.Graph;
 using OsmSharp.Routing.Interpreter.Roads;
 using OsmSharp.Routing.Osm.Interpreter;
-using OsmSharp.Osm.Streams.Filters;
 
 namespace OsmSharp.Routing.Osm.Streams.Graphs
 {
@@ -315,6 +315,7 @@ namespace OsmSharp.Routing.Osm.Streams.Graphs
                                     // add the edge(s).
                                     if (from.HasValue && to.HasValue)
                                     { // add a road edge.
+                                        _dynamicGraph.AddArcMeta(from.Value, to.Value, _tagsIndex.Add(way.Tags));
                                         if (!this.AddRoadEdge(way.Tags, true, from.Value, to.Value))
                                         { // add the reverse too if it has been indicated that this was needed.
                                             this.AddRoadEdge(way.Tags, false, to.Value, from.Value);
@@ -371,12 +372,12 @@ namespace OsmSharp.Routing.Osm.Streams.Graphs
             float latitude;
             float longitude;
             GeoCoordinate fromCoordinate = null;
-            if (_dynamicGraph.GetVertex(from, out latitude, out longitude))
+            if (_dynamicGraph.GetVertexLocation(from, out latitude, out longitude))
             { // 
                 fromCoordinate = new GeoCoordinate(latitude, longitude);
             }
             GeoCoordinate toCoordinate = null;
-            if (_dynamicGraph.GetVertex(to, out latitude, out longitude))
+            if (_dynamicGraph.GetVertexLocation(to, out latitude, out longitude))
             { // 
                 toCoordinate = new GeoCoordinate(latitude, longitude);
             }

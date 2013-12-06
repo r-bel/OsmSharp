@@ -462,7 +462,7 @@ namespace OsmSharp.Routing.BasicRouter.Dykstra
                 }
 
                 float latitude, longitude;
-                graph.GetVertex(Convert.ToUInt32(current.VertexId), out latitude, out longitude);
+                graph.GetVertexLocation(Convert.ToUInt32(current.VertexId), out latitude, out longitude);
                 var currentCoordinates = new GeoCoordinate(latitude, longitude);
 
                 // update the visited nodes.
@@ -508,7 +508,7 @@ namespace OsmSharp.Routing.BasicRouter.Dykstra
 
                             if (constraintsOk)
                             { // all constraints are validated or there are none.
-                                graph.GetVertex(Convert.ToUInt32(neighbour.Key), out latitude, out longitude);
+                                graph.GetVertexLocation(Convert.ToUInt32(neighbour.Key), out latitude, out longitude);
                                 var neighbourCoordinates = new GeoCoordinate(latitude, longitude);
 
                                 // calculate the weight.

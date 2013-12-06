@@ -248,7 +248,7 @@ namespace OsmSharp.Test.Unittests.Routing.CH
                 for (uint idx = 1; idx < _data.VertexCount; idx++)
                 { // resolve each vertex.
                     float latitude, longitude;
-                    if (_data.GetVertex(idx, out latitude, out longitude))
+                    if (_data.GetVertexLocation(idx, out latitude, out longitude))
                     {
                         resolvedReference[idx - 1] = _referenceRouter.Resolve(Vehicle.Car, new GeoCoordinate(latitude, longitude));
                         resolved[idx - 1] = chRouter.Resolve(Vehicle.Car, new GeoCoordinate(latitude, longitude));

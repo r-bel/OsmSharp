@@ -627,19 +627,25 @@ namespace OsmSharp.Routing.BasicRouters
             if (vertex1 > 0 && vertex2 > 0)
             { // none of the vertixes was a resolved vertex.
                 List<KeyValuePair<uint, uint>> arcs = _dataGraph.GetArcsMeta(Convert.ToUInt32(vertex1));
-                foreach (KeyValuePair<uint, uint> arc in arcs)
+                if (arcs != null)
                 {
-                    if (arc.Key == vertex2)
+                    foreach (KeyValuePair<uint, uint> arc in arcs)
                     {
-                        return arc.Value;
+                        if (arc.Key == vertex2)
+                        {
+                            return arc.Value;
+                        }
                     }
                 }
                 arcs = _dataGraph.GetArcsMeta(Convert.ToUInt32(vertex2));
-                foreach (KeyValuePair<uint, uint> arc in arcs)
+                if (arcs != null)
                 {
-                    if (arc.Key == vertex1)
+                    foreach (KeyValuePair<uint, uint> arc in arcs)
                     {
-                        return arc.Value;
+                        if (arc.Key == vertex1)
+                        {
+                            return arc.Value;
+                        }
                     }
                 }
             }
@@ -681,7 +687,7 @@ namespace OsmSharp.Routing.BasicRouters
             }
             else
             { // the vertex should be in the data graph.
-                if (!_dataGraph.GetVertex(Convert.ToUInt32(vertex), out latitude, out longitude))
+                if (!_dataGraph.GetVertexLocation(Convert.ToUInt32(vertex), out latitude, out longitude))
                 {
                     throw new Exception(string.Format("Vertex with id {0} not found in graph!",
                         vertex));
@@ -888,7 +894,7 @@ namespace OsmSharp.Routing.BasicRouters
                 if (!result.Vertex2.HasValue)
                 { // the result was a single vertex.
                     float latitude, longitude;
-                    if (!_dataGraph.GetVertex(result.Vertex1.Value, out latitude, out longitude))
+                    if (!_dataGraph.GetVertexLocation(result.Vertex1.Value, out latitude, out longitude))
                     { // the vertex exists.
                         throw new Exception(string.Format("Vertex with id {0} not found!",
                             result.Vertex1.Value));
@@ -1034,7 +1040,7 @@ namespace OsmSharp.Routing.BasicRouters
                 if (!result.Vertex2.HasValue)
                 { // the result was a single vertex.
                     float latitude, longitude;
-                    if (!_dataGraph.GetVertex(result.Vertex1.Value, out latitude, out longitude))
+                    if (!_dataGraph.GetVertexLocation(result.Vertex1.Value, out latitude, out longitude))
                     { // the vertex exists.
                         throw new Exception(string.Format("Vertex with id {0} not found!",
                             result.Vertex1.Value));
@@ -1113,8 +1119,8 @@ namespace OsmSharp.Routing.BasicRouters
             {
                 // the vertices match.
                 float longitude1, latitude1, longitude2, latitude2;
-                if (_dataGraph.GetVertex(vertex1, out latitude1, out longitude1) &&
-                   _dataGraph.GetVertex(vertex2, out latitude2, out longitude2))
+                if (_dataGraph.GetVertexLocation(vertex1, out latitude1, out longitude1) &&
+                   _dataGraph.GetVertexLocation(vertex2, out latitude2, out longitude2))
                 { // the two vertices are contained in the home graph.
                     var vertex1Coordinate = new GeoCoordinate(
                         latitude1, longitude1);

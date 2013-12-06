@@ -105,10 +105,6 @@ namespace OsmSharp.Test.Unittests.Routing.CH
                         new CHEdgeData(weight2, true, true, false), overlapsWeight);
                     this.DoTestCompare(new CHEdgeData(weight1, true, true, true),
                         new CHEdgeData(weight2, true, true, true), overlapsWeight);
-                    this.DoTestCompare(new CHEdgeData(weight1, true, true, false, 0, 1),
-                        new CHEdgeData(weight2, true, true, false, 0, 1), overlapsWeight);
-                    this.DoTestCompare(new CHEdgeData(weight1, true, true, true, 0, 1),
-                        new CHEdgeData(weight2, true, true, true, 0, 1), overlapsWeight);
                 }
             }
         }

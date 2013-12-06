@@ -18,8 +18,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using OsmSharp.Routing.Graph;
 
 namespace OsmSharp.Routing.CH.PreProcessing
@@ -70,13 +68,11 @@ namespace OsmSharp.Routing.CH.PreProcessing
         /// <param name="backward"></param>
         /// <param name="toHigher"></param>
         /// <param name="contractedVertexId"></param>
-        /// <param name="tags"></param>
-        public CHEdgeData(float weight, bool forward, bool backward, bool toHigher, uint contractedVertexId, uint tags)
+        public CHEdgeData(float weight, bool forward, bool backward, bool toHigher, uint contractedVertexId)
         {
             this.Weight = weight;
             this.SetDirection(forward, backward, toHigher);
             this.ContractedVertexId = contractedVertexId;
-            this.Tags = tags;
         }
 
         /// <summary>
@@ -241,16 +237,21 @@ namespace OsmSharp.Routing.CH.PreProcessing
         public uint ContractedVertexId { get; set; }
 
         /// <summary>
-        /// Returns the tags (0 means no tags). 
-        /// </summary>
-        public uint Tags { get; set; }
-
-        /// <summary>
         /// Returns true if this edge represents a neighbour-relation.
         /// </summary>
         public bool RepresentsNeighbourRelations
         {
             get { return !this.HasContractedVertex; }
+        }
+
+        /// <summary>
+        /// Returns a System.String that represents the current System.Object. 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("CHEdge:{0}[Contr:{1}]",
+                this.Weight, this.ContractedVertexId);
         }
     }
 

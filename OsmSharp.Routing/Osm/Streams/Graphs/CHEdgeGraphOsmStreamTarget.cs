@@ -19,11 +19,10 @@
 using OsmSharp.Collections.Tags;
 using OsmSharp.Math.Geo;
 using OsmSharp.Osm.Streams;
+using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.CH.PreProcessing;
 using OsmSharp.Routing.CH.PreProcessing.Ordering;
 using OsmSharp.Routing.CH.PreProcessing.Witnesses;
-using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.Interpreter.Roads;
 using OsmSharp.Routing.Osm.Interpreter;
 
@@ -87,8 +86,6 @@ namespace OsmSharp.Routing.Osm.Streams.Graphs
             CHEdgeData edgeData = new CHEdgeData()
             {
                 Weight = (float)weight,
-                Tags = tagsIndex.Add(
-                tags),
                 ContractedVertexId = 0
             };
             edgeData.SetDirection(forward, backward, true);

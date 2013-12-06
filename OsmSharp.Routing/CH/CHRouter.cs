@@ -1372,12 +1372,17 @@ namespace OsmSharp.Routing.CH
             {
                 foreach (KeyValuePair<uint, KeyValuePair<uint, CHEdgeData>> arc in arcs)
                 {
+                    if (arc.Value.Value.HasContractedVertex)
+                    { // has a contracted vertex.
+                        continue;
+                    }
+
                     // test the two points.
                     float fromLatitude, fromLongitude;
                     float toLatitude, toLongitude;
                     double distance;
-                    if (graph.GetVertex(arc.Key, out fromLatitude, out fromLongitude) &&
-                        graph.GetVertex(arc.Value.Key, out toLatitude, out toLongitude))
+                    if (graph.GetVertexLocation(arc.Key, out fromLatitude, out fromLongitude) &&
+                        graph.GetVertexLocation(arc.Value.Key, out toLatitude, out toLongitude))
                     { // return the vertex.
                         var fromCoordinates = new GeoCoordinate(fromLatitude, fromLongitude);
                         distance = coordinate.Distance(fromCoordinates);
@@ -1386,14 +1391,17 @@ namespace OsmSharp.Routing.CH
                         { // the distance is smaller than the tolerance value.
                             closestWithoutMatch = new SearchClosestResult(
                                 distance, arc.Key);
-                            TagsCollectionBase arcTags = graph.TagsIndex.Get(arc.Value.Value.Tags);
-                            if (matcher == null ||
-                                (pointTags == null || pointTags.Count == 0) ||
-                                matcher.MatchWithEdge(vehicle, pointTags, arcTags))
+                            if (!arc.Value.Value.HasContractedVertex)
                             {
-                                closestWithMatch = new SearchClosestResult(
-                                    distance, arc.Key);
-                                break;
+                                TagsCollectionBase arcTags = graph.TagsIndex.Get(graph.GetArcMeta(arc.Key, arc.Value.Key));
+                                if (matcher == null ||
+                                    (pointTags == null || pointTags.Count == 0) ||
+                                    matcher.MatchWithEdge(vehicle, pointTags, arcTags))
+                                {
+                                    closestWithMatch = new SearchClosestResult(
+                                        distance, arc.Key);
+                                    break;
+                                }
                             }
                         }
 
@@ -1401,9 +1409,6 @@ namespace OsmSharp.Routing.CH
                         { // the distance is smaller.
                             closestWithoutMatch = new SearchClosestResult(
                                 distance, arc.Key);
-
-                            // try and match.
-                            //if(matcher.Match(_
                         }
                         var toCoordinates = new GeoCoordinate(toLatitude, toLongitude);
                         distance = coordinate.Distance(toCoordinates);
@@ -1412,9 +1417,6 @@ namespace OsmSharp.Routing.CH
                         { // the distance is smaller.
                             closestWithoutMatch = new SearchClosestResult(
                                 distance, arc.Value.Key);
-
-                            // try and match.
-                            //if(matcher.Match(_
                         }
 
                         // get the uncontracted arc from the contracted vertex.
@@ -1431,7 +1433,6 @@ namespace OsmSharp.Routing.CH
                                     var data = new CHEdgeData();
                                     data.Direction = contractedArc.Value.Direction;
                                     data.ContractedVertexId = contractedArc.Value.ContractedVertexId;
-                                    data.Tags = contractedArc.Value.Tags;
                                     data.Weight = contractedArc.Value.Weight;
 
                                     uncontracted = new KeyValuePair<uint, KeyValuePair<uint, CHEdgeData>>(
@@ -1444,7 +1445,7 @@ namespace OsmSharp.Routing.CH
                         // try the to-vertex of the non-contracted arc.
                         if (arc.Value.Key != uncontracted.Value.Key)
                         { // the to-vertex was contracted, not anymore!
-                            if (graph.GetVertex(uncontracted.Value.Key, out toLatitude, out toLongitude))
+                            if (graph.GetVertexLocation(uncontracted.Value.Key, out toLatitude, out toLongitude))
                             { // the to vertex was found
                                 toCoordinates = new GeoCoordinate(toLatitude, toLongitude);
                                 distance = coordinate.Distance(toCoordinates);
@@ -1453,9 +1454,6 @@ namespace OsmSharp.Routing.CH
                                 { // the distance is smaller.
                                     closestWithoutMatch = new SearchClosestResult(
                                         distance, arc.Key);
-
-                                    // try and match.
-                                    //if(matcher.Match(_
                                 }
                             }
                             else
@@ -1485,9 +1483,6 @@ namespace OsmSharp.Routing.CH
 
                                     closestWithoutMatch = new SearchClosestResult(
                                         distance, uncontracted.Key, uncontracted.Value.Key, position);
-
-                                    // try and match.
-                                    //if(matcher.Match(_
                                 }
                             }
                         }
@@ -1501,8 +1496,8 @@ namespace OsmSharp.Routing.CH
                 {
                     float fromLatitude, fromLongitude;
                     float toLatitude, toLongitude;
-                    if (graph.GetVertex(arc.Key, out fromLatitude, out fromLongitude) &&
-                        graph.GetVertex(arc.Value.Key, out toLatitude, out toLongitude))
+                    if (graph.GetVertexLocation(arc.Key, out fromLatitude, out fromLongitude) &&
+                        graph.GetVertexLocation(arc.Value.Key, out toLatitude, out toLongitude))
                     {
                         var vertexCoordinate = new GeoCoordinate(fromLatitude, fromLongitude);
                         double distance = coordinate.Distance(vertexCoordinate);

@@ -19,7 +19,6 @@
 using System.Collections.Generic;
 using OsmSharp.Collections.Tags;
 using OsmSharp.Math.Geo;
-using OsmSharp.Math;
 using OsmSharp.Routing.Graph;
 
 namespace OsmSharp.Routing.BasicRouter
@@ -59,7 +58,7 @@ namespace OsmSharp.Routing.BasicRouter
         /// <param name="id"></param>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
-        bool GetVertex(uint id, out float latitude, out float longitude);
+        bool GetVertexLocation(uint id, out float latitude, out float longitude);
 
         /// <summary>
         /// Returns all available meta-data about arcs leaving the given vertex.
@@ -67,6 +66,14 @@ namespace OsmSharp.Routing.BasicRouter
         /// <param name="vertex"></param>
         /// <returns></returns>
         List<KeyValuePair<uint, uint>> GetArcsMeta(uint vertex);
+
+        /// <summary>
+        /// Returns the available meta-data about the arc between the two given vertices.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        uint GetArcMeta(uint from, uint to);
 
         #region Restrictions
 

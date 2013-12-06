@@ -150,7 +150,7 @@ namespace OsmSharp.Test.Unittests.Routing
             for (uint idx = 1; idx < data.VertexCount; idx++)
             { // resolve each vertex.
                 float latitude, longitude;
-                if (data.GetVertex(idx, out latitude, out longitude))
+                if (data.GetVertexLocation(idx, out latitude, out longitude))
                 {
                     resolvedReference[idx - 1] = referenceRouter.Resolve(Vehicle.Car, new GeoCoordinate(latitude, longitude), true);
                     resolved[idx - 1] = router.Resolve(Vehicle.Car, new GeoCoordinate(latitude, longitude), true);

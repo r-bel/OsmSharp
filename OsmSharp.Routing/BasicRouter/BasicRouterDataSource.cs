@@ -133,8 +133,12 @@ namespace OsmSharp.Routing.BasicRouter
         /// <returns></returns>
         public uint AddVertexLocation(float latitude, float longitude)
         {
+            var location = new GeoCoordinate(latitude, longitude);
+            _vertices.Add(location);
+
+            // WARNING: 0 means unknown!
             uint id = (uint)_vertices.Count;
-            _vertices.Add(new GeoCoordinate(latitude, longitude));
+            _vertexIndex.Add(location, id);
             return id;
         }
 
@@ -145,14 +149,16 @@ namespace OsmSharp.Routing.BasicRouter
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <returns></returns>
-        public bool GetVertex(uint id, out float latitude, out float longitude)
+        public bool GetVertexLocation(uint id, out float latitude, out float longitude)
         {
             latitude = 0;
             longitude = 0;
-            if (_vertices.Count > id)
+            // WARNING: 0 means unknown!
+            if (_vertices.Count >= id)
             {
-                latitude = (float)_vertices[(int)id].Latitude;
-                longitude = (float)_vertices[(int)id].Longitude;
+                latitude = (float)_vertices[(int)id - 1].Latitude;
+                longitude = (float)_vertices[(int)id - 1].Longitude;
+                return true;
             }
             return false;
         }
@@ -241,6 +247,39 @@ namespace OsmSharp.Routing.BasicRouter
                 return arcsMeta;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Returns the available meta-data about the given arc.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public uint GetArcMeta(uint from, uint to)
+        {
+            List<KeyValuePair<uint, uint>> arcsMeta;
+            if (_arcMetaData.TryGetValue(from, out arcsMeta))
+            {
+                foreach (KeyValuePair<uint, uint> meta in arcsMeta)
+                {
+                    if (meta.Key == to)
+                    { // meta data found!
+                        return meta.Value;
+                    }
+                }
+            }
+            if (_arcMetaData.TryGetValue(to, out arcsMeta))
+            { 
+                foreach (KeyValuePair<uint, uint> meta in arcsMeta)
+                {
+                    if (meta.Key == from)
+                    { // meta data found!
+                        return meta.Value;
+                    }
+                }
+            }
+            throw new ArgumentOutOfRangeException(string.Format("Arc {0}->{1} not found!",
+                from, to));
         }
 
         /// <summary>

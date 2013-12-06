@@ -22,13 +22,12 @@ using OsmSharp.Collections.Tags;
 using OsmSharp.Osm.Streams.Filters;
 using OsmSharp.Osm.Xml.Streams;
 using OsmSharp.Routing;
-using OsmSharp.Routing.Graph;
-using OsmSharp.Routing.Interpreter;
-using OsmSharp.Routing.Osm.Graphs;
-using OsmSharp.Routing.Osm.Streams.Graphs;
-using OsmSharp.Routing.Osm.Interpreter;
 using OsmSharp.Routing.BasicRouter;
 using OsmSharp.Routing.BasicRouter.Dykstra;
+using OsmSharp.Routing.Interpreter;
+using OsmSharp.Routing.Osm.Graphs;
+using OsmSharp.Routing.Osm.Interpreter;
+using OsmSharp.Routing.Osm.Streams.Graphs;
 
 namespace OsmSharp.Test.Unittests.Routing.Dykstra
 {

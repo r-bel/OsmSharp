@@ -96,8 +96,8 @@ namespace OsmSharp.Routing.BasicRouter.Dykstra
                         float fromLatitude, fromLongitude;
                         float toLatitude, toLongitude;
                         double distance;
-                        if (graph.GetVertex(arc.Key, out fromLatitude, out fromLongitude) &&
-                            graph.GetVertex(arc.Value.Key, out toLatitude, out toLongitude))
+                        if (graph.GetVertexLocation(arc.Key, out fromLatitude, out fromLongitude) &&
+                            graph.GetVertexLocation(arc.Value.Key, out toLatitude, out toLongitude))
                         { // return the vertex.
                             var fromCoordinates = new GeoCoordinate(fromLatitude, fromLongitude);
                             distance = coordinate.Distance(fromCoordinates);
@@ -204,8 +204,8 @@ namespace OsmSharp.Routing.BasicRouter.Dykstra
                 {
                     float fromLatitude, fromLongitude;
                     float toLatitude, toLongitude;
-                    if (graph.GetVertex(arc.Key, out fromLatitude, out fromLongitude) &&
-                        graph.GetVertex(arc.Value.Key, out toLatitude, out toLongitude))
+                    if (graph.GetVertexLocation(arc.Key, out fromLatitude, out fromLongitude) &&
+                        graph.GetVertexLocation(arc.Value.Key, out toLatitude, out toLongitude))
                     {
                         var vertexCoordinate = new GeoCoordinate(fromLatitude, fromLongitude);
                         double distance = coordinate.Distance(vertexCoordinate);

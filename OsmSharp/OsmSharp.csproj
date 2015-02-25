@@ -125,6 +125,7 @@
     <Compile Include="Geo\GeoCoordinateBox.cs" />
     <Compile Include="Geo\GeoCoordinateLine.cs" />
     <Compile Include="Geo\GeoCoordinatePolygon.cs" />
+    <Compile Include="Geo\GeoMath.cs" />
     <Compile Include="Geo\Geometries\Geometry.cs" />
     <Compile Include="Geo\Geometries\GeometryCollection.cs" />
     <Compile Include="Geo\Geometries\LineairRing.cs" />
